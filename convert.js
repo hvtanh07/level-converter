@@ -75,14 +75,20 @@ function convertLevel(oldData, seed = null) {
     const moves = parseInt(data.moves || 0, 10);
     const frozenCounts = data.columnFrozenCounts || [];
     const restrictedColors = data.columnRestrictedColors || [];
+    const rockedColumns = data.columnRocked || [];
     const benchStartColor = data.benchStartColor !== undefined ? data.benchStartColor : 0;
 
-    // Collect unique colors excluding 0
+    // Collect unique colors excluding 0, including inner layer colors
     const uniqueColors = [];
     for (const col of columns) {
         for (const t of (col.tiles || [])) {
             if (t !== 0 && !uniqueColors.includes(t)) {
                 uniqueColors.push(t);
+            }
+        }
+        for (const ic of (col.tileInnerColors || [])) {
+            if (ic !== -1 && ic !== 0 && !uniqueColors.includes(ic)) {
+                uniqueColors.push(ic);
             }
         }
     }
@@ -100,7 +106,7 @@ function convertLevel(oldData, seed = null) {
     });
 
     let dummyType = colorMap[benchStartColor];
-    if (!dummyType || dummyType === "0") {
+    if (dummyType === undefined) {
         dummyType = assignedIds.length > 0 ? assignedIds[0] : "a1";
     }
 
@@ -117,14 +123,39 @@ function convertLevel(oldData, seed = null) {
         mapRows.push(rowCells.join(","));
     }
 
-    // HiddenColorCar
+    // Tile-based elements
     const hiddenCars = [];
+    const doubleLayerCars = [];
+    const connGroups = {};
+
     columns.forEach((col, cIdx) => {
-        const th = col.tilesHidden || [];
-        th.forEach((h, rIdx) => {
+        // Hidden
+        (col.tilesHidden || []).forEach((h, rIdx) => {
             if (h === 1) {
                 hiddenCars.push({ x: cIdx, y: rIdx });
             }
+        });
+        // Double layer
+        (col.tileInnerColors || []).forEach((ic, rIdx) => {
+            if (ic !== -1) {
+                const innerId = colorMap[ic] || (assignedIds.length > 0 ? assignedIds[0] : "a1");
+                doubleLayerCars.push({ x: cIdx, y: rIdx, innerCarID: innerId });
+            }
+        });
+        // Connected cars
+        (col.tileConnectionIds || []).forEach((cid, rIdx) => {
+            if (cid > 0) {
+                if (!connGroups[cid]) connGroups[cid] = [];
+                connGroups[cid].push({ x: cIdx, y: rIdx });
+            }
+        });
+    });
+
+    const connectedCars = [];
+    Object.keys(connGroups).map(Number).sort((a, b) => a - b).forEach(cid => {
+        connectedCars.push({
+            connectionID: cid,
+            cars: connGroups[cid]
         });
     });
 
@@ -145,6 +176,14 @@ function convertLevel(oldData, seed = null) {
         }
     });
 
+    // WoodenBoxColumns
+    const woodenBoxColumns = [];
+    rockedColumns.forEach((rocked, idx) => {
+        if (rocked === 1) {
+            woodenBoxColumns.push({ index: idx });
+        }
+    });
+
     const newConfig = {
         FormatVersion: 2,
         MapLevel: levelNum,
@@ -156,7 +195,10 @@ function convertLevel(oldData, seed = null) {
         DummyType: dummyType,
         HiddenColorCar: hiddenCars,
         LockedColumns: lockedColumns,
-        ColoredColumnsLocation: coloredColumns
+        ColoredColumnsLocation: coloredColumns,
+        WoodenBoxColumns: woodenBoxColumns,
+        ConnectedCars: connectedCars,
+        DoubleLayerCars: doubleLayerCars
     };
 
     return { newConfig, levelNum, colorMap };

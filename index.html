@@ -24,6 +24,7 @@
             --accent-amber: #fbbf24;
             --accent-rose: #fb7185;
             --accent-purple: #c084fc;
+            --accent-orange: #fb923c;
             --border-color: #334155;
             --radius-md: 10px;
             --radius-lg: 16px;
@@ -83,7 +84,7 @@
         }
 
         .container {
-            max-width: 1280px;
+            max-width: 1320px;
             width: 100%;
             margin: 0 auto;
             padding: 28px 24px 60px 24px;
@@ -193,7 +194,7 @@
         /* Stats Bar */
         .stats-bar {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
             gap: 16px;
         }
 
@@ -216,7 +217,7 @@
         }
 
         .stat-val {
-            font-size: 1.5rem;
+            font-size: 1.45rem;
             font-weight: 700;
             color: var(--accent-blue);
         }
@@ -261,7 +262,7 @@
             background: var(--bg-secondary);
             border: 1px solid var(--border-color);
             border-radius: var(--radius-lg);
-            overflow: hidden;
+            overflow-x: auto;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
         }
 
@@ -269,22 +270,22 @@
             width: 100%;
             border-collapse: collapse;
             text-align: left;
-            font-size: 0.9rem;
+            font-size: 0.88rem;
         }
 
         th {
             background: #1e293b;
             color: var(--text-secondary);
             font-weight: 600;
-            font-size: 0.78rem;
+            font-size: 0.76rem;
             text-transform: uppercase;
             letter-spacing: 0.05em;
-            padding: 14px 18px;
+            padding: 14px 16px;
             border-bottom: 1px solid var(--border-color);
         }
 
         td {
-            padding: 14px 18px;
+            padding: 12px 16px;
             border-bottom: 1px solid rgba(51, 65, 85, 0.5);
             vertical-align: middle;
         }
@@ -296,24 +297,27 @@
         .pill {
             display: inline-flex;
             align-items: center;
-            gap: 5px;
-            font-size: 0.78rem;
-            padding: 3px 8px;
+            gap: 4px;
+            font-size: 0.74rem;
+            padding: 2px 7px;
             border-radius: 6px;
             font-weight: 600;
             margin: 2px;
+            white-space: nowrap;
         }
 
         .pill-blue { background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3); }
         .pill-green { background: rgba(74, 222, 128, 0.15); color: #4ade80; border: 1px solid rgba(74, 222, 128, 0.3); }
         .pill-amber { background: rgba(251, 191, 36, 0.15); color: #fbbf24; border: 1px solid rgba(251, 191, 36, 0.3); }
         .pill-purple { background: rgba(192, 132, 252, 0.15); color: #c084fc; border: 1px solid rgba(192, 132, 252, 0.3); }
+        .pill-rose { background: rgba(251, 113, 133, 0.15); color: #fb7185; border: 1px solid rgba(251, 113, 133, 0.3); }
+        .pill-orange { background: rgba(251, 146, 60, 0.15); color: #fb923c; border: 1px solid rgba(251, 146, 60, 0.3); }
         .pill-gray { background: rgba(148, 163, 184, 0.15); color: #94a3b8; border: 1px solid rgba(148, 163, 184, 0.25); }
 
         .car-badge {
             font-family: monospace;
-            font-size: 0.8rem;
-            padding: 2px 6px;
+            font-size: 0.78rem;
+            padding: 2px 5px;
             border-radius: 4px;
             font-weight: 700;
             display: inline-block;
@@ -344,7 +348,7 @@
             border: 1px solid var(--border-color);
             border-radius: var(--radius-lg);
             width: 100%;
-            max-width: 960px;
+            max-width: 1000px;
             max-height: 90vh;
             display: flex;
             flex-direction: column;
@@ -376,7 +380,7 @@
         .board-visual {
             background: #0b1120;
             border-radius: var(--radius-md);
-            padding: 16px;
+            padding: 20px;
             border: 1px solid #334155;
             display: flex;
             flex-direction: column;
@@ -385,18 +389,37 @@
             overflow-x: auto;
         }
 
+        .board-header-row {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 4px;
+        }
+
+        .board-col-indicator {
+            width: 52px;
+            text-align: center;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+        }
+
         .board-row {
             display: flex;
-            gap: 6px;
+            gap: 8px;
         }
 
         .board-cell {
-            width: 44px;
-            height: 38px;
+            width: 52px;
+            height: 42px;
             background: #1e293b;
-            border: 1px solid #475569;
+            border: 1.5px solid #475569;
             border-radius: 6px;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
             font-family: monospace;
@@ -420,11 +443,33 @@
             justify-content: center;
         }
 
+        .board-cell.connected-car::before {
+            content: "🔗" attr(data-conn);
+            position: absolute;
+            bottom: -5px;
+            left: -5px;
+            font-size: 9px;
+            background: #d97706;
+            color: #fff;
+            padding: 1px 3px;
+            border-radius: 4px;
+        }
+
+        .inner-badge {
+            font-size: 0.65rem;
+            background: #4338ca;
+            color: #c7d2fe;
+            padding: 1px 4px;
+            border-radius: 3px;
+            margin-top: 1px;
+            font-weight: 600;
+        }
+
         .json-preview {
             background: #0b1120;
             color: #38bdf8;
             font-family: "Fira Code", Consolas, Monaco, monospace;
-            font-size: 0.85rem;
+            font-size: 0.84rem;
             line-height: 1.45;
             padding: 16px;
             border-radius: var(--radius-md);
@@ -462,7 +507,7 @@
         <div class="header-title">
             <span style="font-size: 1.6rem;">🚗</span>
             <h1>Level Format Converter</h1>
-            <span class="badge-ver">v2.0</span>
+            <span class="badge-ver">v2.1</span>
         </div>
         <div>
             <button class="btn btn-primary" id="btn-header-export" style="display: none;" onclick="exportAllZip()">
@@ -477,7 +522,7 @@
         <div class="dropzone" id="dropzone">
             <div class="drop-icon">📥</div>
             <div class="drop-title">Drop your old level JSON files here</div>
-            <div class="drop-subtitle">Upload multiple individual level files or choose a folder</div>
+            <div class="drop-subtitle">Upload multiple individual level files or select a folder</div>
             <div class="button-group">
                 <button class="btn btn-primary" onclick="document.getElementById('file-input').click();">
                     📁 Select JSON Files
@@ -504,9 +549,9 @@
                 <span class="stat-label">Total Moves</span>
                 <span class="stat-val" id="stat-moves">0</span>
             </div>
-            <div class="stat-card">
-                <span class="stat-label">Features Detected</span>
-                <span class="stat-val" id="stat-features" style="font-size: 1.15rem; color: #4ade80;">-</span>
+            <div class="stat-card" style="grid-column: span 2;">
+                <span class="stat-label">Elements Detected</span>
+                <span class="stat-val" id="stat-features" style="font-size: 1rem; color: #4ade80;">-</span>
             </div>
         </div>
 
@@ -538,6 +583,7 @@
                         <th>Level</th>
                         <th>Grid Size</th>
                         <th>Moves</th>
+                        <th>Dummy / Bench</th>
                         <th>Elements</th>
                         <th>Car Mappings</th>
                         <th style="text-align: right;">Action</th>
@@ -559,6 +605,8 @@
                 <button class="btn" style="padding: 4px 10px;" onclick="closeModal()">✕</button>
             </div>
             <div class="modal-body">
+                <div id="modal-dummy-info" style="display: flex; gap: 8px; align-items: center; background: rgba(51, 65, 85, 0.4); padding: 8px 14px; border-radius: 8px; border: 1px solid var(--border-color); font-size: 0.88rem;"></div>
+
                 <div>
                     <h3 style="font-size: 0.95rem; margin-bottom: 10px; color: var(--text-secondary);">Visual Map Preview (Top to Bottom)</h3>
                     <div class="board-visual" id="modal-board"></div>
@@ -567,7 +615,7 @@
                 <div>
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
                         <h3 style="font-size: 0.95rem; color: var(--text-secondary);">Converted JSON Output (level_{N}.json)</h3>
-                        <button class="btn" style="padding: 4px 10px; font-size: 0.8rem;" onclick="copyModalJson()">📋 Copy JSON</button>
+                        <button class="btn" style="padding: 4px 10px; font-size: 0.8rem;" onclick="copyModalJson(this)">📋 Copy JSON</button>
                     </div>
                     <div class="json-preview" id="modal-json"></div>
                 </div>
@@ -649,14 +697,20 @@
             const moves = parseInt(data.moves || 0, 10);
             const frozenCounts = data.columnFrozenCounts || [];
             const restrictedColors = data.columnRestrictedColors || [];
+            const rockedColumns = data.columnRocked || [];
             const benchStartColor = data.benchStartColor !== undefined ? data.benchStartColor : 0;
 
-            // Collect unique colors excluding 0
+            // Collect unique colors excluding 0, including inner colors
             const uniqueColors = [];
             for (const col of columns) {
                 for (const t of (col.tiles || [])) {
                     if (t !== 0 && !uniqueColors.includes(t)) {
                         uniqueColors.push(t);
+                    }
+                }
+                for (const ic of (col.tileInnerColors || [])) {
+                    if (ic !== -1 && ic !== 0 && !uniqueColors.includes(ic)) {
+                        uniqueColors.push(ic);
                     }
                 }
             }
@@ -674,7 +728,7 @@
             });
 
             let dummyType = colorMap[benchStartColor];
-            if (!dummyType || dummyType === "0") {
+            if (dummyType === undefined) {
                 dummyType = assignedIds.length > 0 ? assignedIds[0] : "a1";
             }
 
@@ -693,16 +747,39 @@
                 mapRows.push(rowCells.join(","));
             }
 
-            // HiddenColorCar:
-            // x = column index (0..numQueue-1)
-            // y = tile index from bottom (0 at bottom)
+            // Tile-based elements
             const hiddenCars = [];
+            const doubleLayerCars = [];
+            const connGroups = {};
+
             columns.forEach((col, cIdx) => {
-                const th = col.tilesHidden || [];
-                th.forEach((h, rIdx) => {
+                // Hidden
+                (col.tilesHidden || []).forEach((h, rIdx) => {
                     if (h === 1) {
                         hiddenCars.push({ x: cIdx, y: rIdx });
                     }
+                });
+                // Double layer
+                (col.tileInnerColors || []).forEach((ic, rIdx) => {
+                    if (ic !== -1) {
+                        const innerId = colorMap[ic] || (assignedIds.length > 0 ? assignedIds[0] : "a1");
+                        doubleLayerCars.push({ x: cIdx, y: rIdx, innerCarID: innerId });
+                    }
+                });
+                // Connected cars
+                (col.tileConnectionIds || []).forEach((cid, rIdx) => {
+                    if (cid > 0) {
+                        if (!connGroups[cid]) connGroups[cid] = [];
+                        connGroups[cid].push({ x: cIdx, y: rIdx });
+                    }
+                });
+            });
+
+            const connectedCars = [];
+            Object.keys(connGroups).map(Number).sort((a, b) => a - b).forEach(cid => {
+                connectedCars.push({
+                    connectionID: cid,
+                    cars: connGroups[cid]
                 });
             });
 
@@ -723,6 +800,14 @@
                 }
             });
 
+            // WoodenBoxColumns:
+            const woodenBoxColumns = [];
+            rockedColumns.forEach((rocked, idx) => {
+                if (rocked === 1) {
+                    woodenBoxColumns.push({ index: idx });
+                }
+            });
+
             const newConfig = {
                 FormatVersion: 2,
                 MapLevel: levelNum,
@@ -734,7 +819,10 @@
                 DummyType: dummyType,
                 HiddenColorCar: hiddenCars,
                 LockedColumns: lockedColumns,
-                ColoredColumnsLocation: coloredColumns
+                ColoredColumnsLocation: coloredColumns,
+                WoodenBoxColumns: woodenBoxColumns,
+                ConnectedCars: connectedCars,
+                DoubleLayerCars: doubleLayerCars
             };
 
             return { newConfig, levelNum, colorMap };
@@ -784,7 +872,6 @@
                     const raw = JSON.parse(text);
                     const { newConfig, levelNum, colorMap } = convertLevel(raw);
                     
-                    // Replace if same level or source name exists, otherwise append
                     const existingIdx = loadedLevels.findIndex(l => l.sourceName === file.name || l.levelNum === levelNum);
                     const item = {
                         sourceName: file.name,
@@ -804,9 +891,7 @@
                 }
             }
 
-            // Sort loaded levels by level number
             loadedLevels.sort((a, b) => a.levelNum - b.levelNum);
-
             updateUI();
         }
 
@@ -830,13 +915,19 @@
                 let hiddenTotal = 0;
                 let lockedTotal = 0;
                 let coloredTotal = 0;
+                let boxTotal = 0;
+                let connTotal = 0;
+                let doubleTotal = 0;
                 loadedLevels.forEach(l => {
                     hiddenTotal += (l.newConfig.HiddenColorCar || []).length;
                     lockedTotal += (l.newConfig.LockedColumns || []).length;
                     coloredTotal += (l.newConfig.ColoredColumnsLocation || []).length;
+                    boxTotal += (l.newConfig.WoodenBoxColumns || []).length;
+                    connTotal += (l.newConfig.ConnectedCars || []).length;
+                    doubleTotal += (l.newConfig.DoubleLayerCars || []).length;
                 });
                 document.getElementById('stat-features').textContent = 
-                    `${hiddenTotal} Hidden · ${lockedTotal} Locked · ${coloredTotal} Roads`;
+                    `${hiddenTotal} Hidden · ${lockedTotal} Locked · ${coloredTotal} Roads · ${boxTotal} Boxes · ${connTotal} Connected · ${doubleTotal} Double`;
 
                 renderTable();
             }
@@ -865,13 +956,22 @@
                 // Elements pills
                 const pills = [];
                 if (cfg.HiddenColorCar && cfg.HiddenColorCar.length > 0) {
-                    pills.push(`<span class="pill pill-rose" style="background: rgba(251, 113, 133, 0.15); color: #fb7185; border: 1px solid rgba(251, 113, 133, 0.3);">👁 ${cfg.HiddenColorCar.length} Hidden</span>`);
+                    pills.push(`<span class="pill pill-rose">👁 ${cfg.HiddenColorCar.length} Hidden</span>`);
                 }
                 if (cfg.LockedColumns && cfg.LockedColumns.length > 0) {
                     pills.push(`<span class="pill pill-blue">❄ ${cfg.LockedColumns.length} Locked</span>`);
                 }
                 if (cfg.ColoredColumnsLocation && cfg.ColoredColumnsLocation.length > 0) {
                     pills.push(`<span class="pill pill-purple">🎯 ${cfg.ColoredColumnsLocation.length} Road</span>`);
+                }
+                if (cfg.WoodenBoxColumns && cfg.WoodenBoxColumns.length > 0) {
+                    pills.push(`<span class="pill pill-amber">📦 ${cfg.WoodenBoxColumns.length} Box</span>`);
+                }
+                if (cfg.ConnectedCars && cfg.ConnectedCars.length > 0) {
+                    pills.push(`<span class="pill pill-orange">🔗 ${cfg.ConnectedCars.length} Groups</span>`);
+                }
+                if (cfg.DoubleLayerCars && cfg.DoubleLayerCars.length > 0) {
+                    pills.push(`<span class="pill pill-green">🧬 ${cfg.DoubleLayerCars.length} Double</span>`);
                 }
                 if (pills.length === 0) {
                     pills.push(`<span class="pill pill-gray">Standard</span>`);
@@ -895,13 +995,20 @@
                     <td><span class="pill pill-blue">Level ${level.levelNum}</span></td>
                     <td>${cfg.NumQueue} cols × ${cfg.NumPerRow} rows</td>
                     <td>${cfg.MaxMove}</td>
+                    <td>
+                        <span class="car-badge car-${cfg.DummyType[0] || '0'}" style="font-size: 0.82rem; padding: 2px 7px;">${cfg.DummyType}</span>
+                        ${cfg.DummyType === '0' ? '<span class="pill pill-purple" style="font-size: 0.7rem;">🌈 Bench</span>' : ''}
+                    </td>
                     <td>${pills.join(' ')}</td>
                     <td>${mapBadges.join(' ')}</td>
-                    <td style="text-align: right;">
-                        <button class="btn" style="padding: 5px 12px; font-size: 0.8rem;" onclick="openInspectModal(${level.levelNum})">
+                    <td style="text-align: right; white-space: nowrap;">
+                        <button class="btn" style="padding: 5px 10px; font-size: 0.8rem;" onclick="copyLevelJson(${level.levelNum}, this)" title="Quick copy JSON to clipboard">
+                            📋 Copy
+                        </button>
+                        <button class="btn" style="padding: 5px 10px; font-size: 0.8rem;" onclick="openInspectModal(${level.levelNum})" title="Inspect board & JSON">
                             🔍 Inspect
                         </button>
-                        <button class="btn btn-primary" style="padding: 5px 12px; font-size: 0.8rem;" onclick="downloadSingleJson(${level.levelNum})">
+                        <button class="btn btn-primary" style="padding: 5px 10px; font-size: 0.8rem;" onclick="downloadSingleJson(${level.levelNum})" title="Download JSON">
                             ⬇
                         </button>
                     </td>
@@ -938,15 +1045,46 @@
             const cfg = level.newConfig;
 
             document.getElementById('modal-level-title').textContent = 
-                `Level ${level.levelNum} (from ${level.sourceName}) — ${cfg.NumQueue} Queues × ${cfg.NumPerRow} Rows`;
+                `Level ${level.levelNum} (${level.sourceName}) — ${cfg.NumQueue} Queues × ${cfg.NumPerRow} Rows`;
+
+            const dummyInfo = document.getElementById('modal-dummy-info');
+            if (dummyInfo) {
+                dummyInfo.innerHTML = `
+                    <span style="font-weight: 600;">Bench Car (DummyType):</span>
+                    <span class="car-badge car-${cfg.DummyType[0] || '0'}" style="font-size: 0.95rem; padding: 2px 8px;">${cfg.DummyType}</span>
+                    ${cfg.DummyType === '0' ? '<span class="pill pill-purple">🌈 Rainbow Car (0) starts on the Bench</span>' : '<span class="pill pill-blue">Starts on the Bench</span>'}
+                `;
+            }
 
             // Build Visual Board
             const board = document.getElementById('modal-board');
             board.innerHTML = '';
 
-            const hiddenSet = new Set(
-                (cfg.HiddenColorCar || []).map(h => `${h.x},${h.y}`)
-            );
+            const hiddenSet = new Set((cfg.HiddenColorCar || []).map(h => `${h.x},${h.y}`));
+            const doubleMap = new Map((cfg.DoubleLayerCars || []).map(d => [`${d.x},${d.y}`, d.innerCarID]));
+            const connMap = new Map();
+            (cfg.ConnectedCars || []).forEach(grp => {
+                grp.cars.forEach(c => connMap.set(`${c.x},${c.y}`, grp.connectionID));
+            });
+
+            const lockedCols = new Map((cfg.LockedColumns || []).map(l => [l.index, l.counter]));
+            const coloredCols = new Map((cfg.ColoredColumnsLocation || []).map(c => [c.index, c.carID]));
+            const boxCols = new Set((cfg.WoodenBoxColumns || []).map(b => b.index));
+
+            // Column indicators header row
+            const headerRow = document.createElement('div');
+            headerRow.className = 'board-header-row';
+            for (let c = 0; c < cfg.NumQueue; c++) {
+                const ind = document.createElement('div');
+                ind.className = 'board-col-indicator';
+                let label = `C${c}`;
+                if (boxCols.has(c)) label = `📦 C${c}`;
+                else if (lockedCols.has(c)) label = `❄${lockedCols.get(c)} C${c}`;
+                else if (coloredCols.has(c)) label = `🎯${coloredCols.get(c)}`;
+                ind.textContent = label;
+                headerRow.appendChild(ind);
+            }
+            board.appendChild(headerRow);
 
             // cfg.Map[0] is top row (y = NumPerRow - 1) down to Map[last] (y = 0)
             cfg.Map.forEach((rowStr, rIdx) => {
@@ -956,13 +1094,35 @@
 
                 const cols = rowStr.split(',');
                 cols.forEach((carId, x) => {
+                    const key = `${x},${y}`;
                     const cell = document.createElement('div');
                     cell.className = `board-cell car-${carId[0] || '0'}`;
-                    if (hiddenSet.has(`${x},${y}`)) {
+
+                    let tooltip = `(x: ${x}, y: ${y}) Car: ${carId}`;
+
+                    if (hiddenSet.has(key)) {
                         cell.classList.add('hidden-car');
-                        cell.title = `Hidden Car at (x: ${x}, y: ${y})`;
+                        tooltip += ` [Hidden]`;
                     }
+                    if (connMap.has(key)) {
+                        cell.classList.add('connected-car');
+                        const cid = connMap.get(key);
+                        cell.setAttribute('data-conn', cid);
+                        tooltip += ` [Connected #${cid}]`;
+                    }
+
                     cell.textContent = carId;
+
+                    if (doubleMap.has(key)) {
+                        const innerId = doubleMap.get(key);
+                        const innerBadge = document.createElement('span');
+                        innerBadge.className = 'inner-badge';
+                        innerBadge.textContent = innerId;
+                        cell.appendChild(innerBadge);
+                        tooltip += ` [Inner: ${innerId}]`;
+                    }
+
+                    cell.title = tooltip;
                     rowDiv.appendChild(cell);
                 });
                 board.appendChild(rowDiv);
@@ -982,11 +1142,48 @@
             activeModalLevel = null;
         }
 
-        function copyModalJson() {
+        function copyLevelJson(levelNum, btnElement) {
+            const level = loadedLevels.find(l => l.levelNum === levelNum);
+            if (!level) return;
+
+            const jsonStr = JSON.stringify(level.newConfig, null, 4);
+            navigator.clipboard.writeText(jsonStr).then(() => {
+                if (btnElement) {
+                    const originalHtml = btnElement.innerHTML;
+                    btnElement.innerHTML = "✅ Copied!";
+                    btnElement.style.borderColor = "#4ade80";
+                    btnElement.style.color = "#4ade80";
+                    setTimeout(() => {
+                        btnElement.innerHTML = originalHtml;
+                        btnElement.style.borderColor = "";
+                        btnElement.style.color = "";
+                    }, 1400);
+                }
+            }).catch(err => {
+                console.error("Clipboard copy failed:", err);
+                alert("Failed to copy JSON: " + err.message);
+            });
+        }
+
+        function copyModalJson(btnElement) {
             if (!activeModalLevel) return;
             const jsonStr = JSON.stringify(activeModalLevel.newConfig, null, 4);
+            const btn = btnElement || event?.target;
             navigator.clipboard.writeText(jsonStr).then(() => {
-                alert("JSON copied to clipboard!");
+                if (btn) {
+                    const originalHtml = btn.innerHTML;
+                    btn.innerHTML = "✅ Copied!";
+                    btn.style.borderColor = "#4ade80";
+                    btn.style.color = "#4ade80";
+                    setTimeout(() => {
+                        btn.innerHTML = originalHtml;
+                        btn.style.borderColor = "";
+                        btn.style.color = "";
+                    }, 1400);
+                }
+            }).catch(err => {
+                console.error("Clipboard copy failed:", err);
+                alert("Failed to copy JSON: " + err.message);
             });
         }
 

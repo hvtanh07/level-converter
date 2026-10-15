@@ -50,7 +50,6 @@ def convert_level(old_data: Dict[str, Any], seed: int = None) -> Tuple[Dict[str,
     level_num = data.get('level')
     if level_num is None:
         name = old_data.get('m_Name', '')
-        # Try extracting trailing number from name like StackSortLevel_49
         import re
         m = re.search(r'\d+', name)
         level_num = int(m.group(0)) if m else 1
@@ -69,14 +68,18 @@ def convert_level(old_data: Dict[str, Any], seed: int = None) -> Tuple[Dict[str,
     moves = int(data.get('moves', 0))
     frozen_counts = data.get('columnFrozenCounts', [])
     restricted_colors = data.get('columnRestrictedColors', [])
+    rocked_columns = data.get('columnRocked', [])
     bench_start_color = data.get('benchStartColor', 0)
 
-    # Collect unique colors present on board tiles (excluding 0 which is wildcard/empty)
+    # Collect unique colors present on board tiles and inner tiles
     unique_colors = []
     for col in columns:
         for t in col.get('tiles', []):
             if t != 0 and t not in unique_colors:
                 unique_colors.append(t)
+        for ic in col.get('tileInnerColors', []):
+            if ic != -1 and ic != 0 and ic not in unique_colors:
+                unique_colors.append(ic)
     
     # Also include bench_start_color if it's non-zero and not in unique_colors
     if bench_start_color != 0 and bench_start_color not in unique_colors:
@@ -92,15 +95,14 @@ def convert_level(old_data: Dict[str, Any], seed: int = None) -> Tuple[Dict[str,
     for idx, c in enumerate(unique_colors):
         color_map[c] = assigned_ids[idx]
 
-    # DummyType: from benchStartColor, or first mapped car if benchStartColor is 0 / unmapped
+    # DummyType: from benchStartColor (preserving '0' if benchStartColor is 0)
     dummy_type = color_map.get(bench_start_color)
-    if not dummy_type or dummy_type == "0":
+    if dummy_type is None:
         dummy_type = assigned_ids[0] if assigned_ids else "a1"
 
     # Map array:
     # Map[0] = top row (tile index tiles_per_column - 1)
     # Map[tiles_per_column - 1] = bottom row (tile index 0)
-    # Comma-separated car IDs across columns (x: 0 .. num_queue - 1)
     map_rows = []
     for r in range(tiles_per_column):
         tile_idx = tiles_per_column - 1 - r
@@ -111,15 +113,34 @@ def convert_level(old_data: Dict[str, Any], seed: int = None) -> Tuple[Dict[str,
             row_cells.append(color_map.get(t, "0"))
         map_rows.append(",".join(row_cells))
 
-    # HiddenColorCar:
+    # Tile-based elements:
     # x = column index (0..num_queue-1)
     # y = tile index from bottom (0 at bottom)
     hidden_cars = []
+    double_layer_cars = []
+    conn_groups = {}
+
     for c_idx, col in enumerate(columns):
-        th = col.get('tilesHidden', [])
-        for r_idx, h in enumerate(th):
+        # Hidden cars
+        for r_idx, h in enumerate(col.get('tilesHidden', [])):
             if h == 1:
                 hidden_cars.append({"x": c_idx, "y": r_idx})
+        # Double layer cars
+        for r_idx, ic in enumerate(col.get('tileInnerColors', [])):
+            if ic != -1:
+                inner_id = color_map.get(ic, assigned_ids[0] if assigned_ids else "a1")
+                double_layer_cars.append({"x": c_idx, "y": r_idx, "innerCarID": inner_id})
+        # Connected cars
+        for r_idx, cid in enumerate(col.get('tileConnectionIds', [])):
+            if cid > 0:
+                conn_groups.setdefault(cid, []).append({"x": c_idx, "y": r_idx})
+
+    connected_cars = []
+    for cid in sorted(conn_groups.keys()):
+        connected_cars.append({
+            "connectionID": cid,
+            "cars": conn_groups[cid]
+        })
 
     # LockedColumns: maps from columnFrozenCounts where count > 0
     locked_columns = []
@@ -134,6 +155,12 @@ def convert_level(old_data: Dict[str, Any], seed: int = None) -> Tuple[Dict[str,
             car_id = color_map.get(c, assigned_ids[0] if assigned_ids else "a1")
             colored_columns.append({"index": idx, "carID": car_id})
 
+    # WoodenBoxColumns: maps from columnRocked where rocked == 1
+    wooden_box_columns = []
+    for idx, rocked in enumerate(rocked_columns):
+        if rocked == 1:
+            wooden_box_columns.append({"index": idx})
+
     new_config = {
         "FormatVersion": 2,
         "MapLevel": level_num,
@@ -145,7 +172,10 @@ def convert_level(old_data: Dict[str, Any], seed: int = None) -> Tuple[Dict[str,
         "DummyType": dummy_type,
         "HiddenColorCar": hidden_cars,
         "LockedColumns": locked_columns,
-        "ColoredColumnsLocation": colored_columns
+        "ColoredColumnsLocation": colored_columns,
+        "WoodenBoxColumns": wooden_box_columns,
+        "ConnectedCars": connected_cars,
+        "DoubleLayerCars": double_layer_cars
     }
 
     return new_config, level_num
