@@ -14,29 +14,85 @@ import argparse
 from typing import Dict, Any, List, Tuple
 
 
-def get_balanced_car_ids(count: int, rng: random.Random) -> List[str]:
+def assign_car_colors(unique_colors: List[int], double_layer_pairs: List[Tuple[int, int]], rng: random.Random) -> Dict[int, str]:
     """
-    Generate `count` distinct car IDs with balanced distribution across
-    types ('a', 'b', 'c') and colors (1..7).
+    Assign car IDs to unique colors.
+    If double layer pairs are present, inner and outer colors are grouped to share the same
+    car model (a with a, b with b, c with c) with distinct color numbers (1..7).
     """
     types = ['a', 'b', 'c']
-    all_pairs = [(t, c) for t in types for c in range(1, 8)]  # 21 unique combinations
-    
-    # Shuffle all pairs with the provided RNG
-    rng.shuffle(all_pairs)
-    
-    if count <= len(all_pairs):
-        return [f"{t}{c}" for t, c in all_pairs[:count]]
-    
-    # If more than 21 colors (very rare), cycle through with reshuffle
-    result = [f"{t}{c}" for t, c in all_pairs]
-    while len(result) < count:
-        rng.shuffle(all_pairs)
-        for t, c in all_pairs:
-            result.append(f"{t}{c}")
-            if len(result) == count:
-                break
-    return result
+    rng.shuffle(types)
+
+    # Build connected components of double layer pairs
+    adj: Dict[int, Set[int]] = {}
+    for u, v in double_layer_pairs:
+        if u != 0 and v != 0 and u != v:
+            adj.setdefault(u, set()).add(v)
+            adj.setdefault(v, set()).add(u)
+
+    visited = set()
+    components = []
+    for node in adj:
+        if node not in visited:
+            comp = []
+            q = [node]
+            visited.add(node)
+            while q:
+                curr = q.pop()
+                comp.append(curr)
+                for nxt in adj[curr]:
+                    if nxt not in visited:
+                        visited.add(nxt)
+                        q.append(nxt)
+            components.append(comp)
+
+    available_by_type = {t: list(range(1, 8)) for t in ['a', 'b', 'c']}
+    for t in available_by_type:
+        rng.shuffle(available_by_type[t])
+
+    color_map: Dict[int, str] = {0: "0"}
+    components.sort(key=len, reverse=True)
+
+    type_idx = 0
+    for comp in components:
+        if len(comp) <= 7:
+            chosen_type = None
+            for _ in range(3):
+                t = types[type_idx % 3]
+                type_idx += 1
+                if len(available_by_type[t]) >= len(comp):
+                    chosen_type = t
+                    break
+            if not chosen_type:
+                chosen_type = max(available_by_type.keys(), key=lambda t: len(available_by_type[t]))
+
+            for c in comp:
+                if c not in color_map and available_by_type[chosen_type]:
+                    col_num = available_by_type[chosen_type].pop(0)
+                    color_map[c] = f"{chosen_type}{col_num}"
+        else:
+            for c in comp:
+                if c not in color_map:
+                    chosen_type = max(available_by_type.keys(), key=lambda t: len(available_by_type[t]))
+                    if available_by_type[chosen_type]:
+                        col_num = available_by_type[chosen_type].pop(0)
+                        color_map[c] = f"{chosen_type}{col_num}"
+
+    # Remaining colors not involved in double layers
+    remaining = [c for c in unique_colors if c not in color_map]
+    rem_pairs = []
+    for t in types:
+        for num in available_by_type[t]:
+            rem_pairs.append(f"{t}{num}")
+    rng.shuffle(rem_pairs)
+
+    for idx, c in enumerate(remaining):
+        if idx < len(rem_pairs):
+            color_map[c] = rem_pairs[idx]
+        else:
+            color_map[c] = f"{types[idx % 3]}{(idx % 7) + 1}"
+
+    return color_map
 
 
 def convert_level(old_data: Dict[str, Any], seed: int = None) -> Tuple[Dict[str, Any], int]:
@@ -71,15 +127,21 @@ def convert_level(old_data: Dict[str, Any], seed: int = None) -> Tuple[Dict[str,
     rocked_columns = data.get('columnRocked', [])
     bench_start_color = data.get('benchStartColor', 0)
 
-    # Collect unique colors present on board tiles and inner tiles
+    # Collect unique colors present on board tiles and inner tiles, and double layer pairs
     unique_colors = []
+    double_layer_pairs = []
     for col in columns:
-        for t in col.get('tiles', []):
+        tiles = col.get('tiles', [])
+        inners = col.get('tileInnerColors', [])
+        for t in tiles:
             if t != 0 and t not in unique_colors:
                 unique_colors.append(t)
-        for ic in col.get('tileInnerColors', []):
+        for ic in inners:
             if ic != -1 and ic != 0 and ic not in unique_colors:
                 unique_colors.append(ic)
+        for t, ic in zip(tiles, inners):
+            if ic != -1 and t != 0 and ic != 0:
+                double_layer_pairs.append((t, ic))
     
     # Also include bench_start_color if it's non-zero and not in unique_colors
     if bench_start_color != 0 and bench_start_color not in unique_colors:
@@ -89,16 +151,13 @@ def convert_level(old_data: Dict[str, Any], seed: int = None) -> Tuple[Dict[str,
     rng_seed = seed if seed is not None else level_num
     rng = random.Random(rng_seed)
 
-    # Generate car IDs for each unique color
-    assigned_ids = get_balanced_car_ids(len(unique_colors), rng)
-    color_map: Dict[int, str] = {0: "0"}
-    for idx, c in enumerate(unique_colors):
-        color_map[c] = assigned_ids[idx]
+    # Generate car IDs adhering to double-layer same car type rule
+    color_map = assign_car_colors(unique_colors, double_layer_pairs, rng)
 
     # DummyType: from benchStartColor (preserving '0' if benchStartColor is 0)
     dummy_type = color_map.get(bench_start_color)
     if dummy_type is None:
-        dummy_type = assigned_ids[0] if assigned_ids else "a1"
+        dummy_type = color_map.get(unique_colors[0], "a1") if unique_colors else "a1"
 
     # Map array:
     # Map[0] = top row (tile index tiles_per_column - 1)
@@ -121,14 +180,27 @@ def convert_level(old_data: Dict[str, Any], seed: int = None) -> Tuple[Dict[str,
     conn_groups = {}
 
     for c_idx, col in enumerate(columns):
+        tiles = col.get('tiles', [])
+        inners = col.get('tileInnerColors', [])
         # Hidden cars
         for r_idx, h in enumerate(col.get('tilesHidden', [])):
             if h == 1:
                 hidden_cars.append({"x": c_idx, "y": r_idx})
-        # Double layer cars
-        for r_idx, ic in enumerate(col.get('tileInnerColors', [])):
+        # Double layer cars (Rule: inner and outer color must be the same car model: a with a, b with b)
+        for r_idx, ic in enumerate(inners):
             if ic != -1:
-                inner_id = color_map.get(ic, assigned_ids[0] if assigned_ids else "a1")
+                outer_t = tiles[r_idx] if r_idx < len(tiles) else 0
+                outer_id = color_map.get(outer_t, "a1")
+                inner_id = color_map.get(ic, "a1")
+
+                # Guarantee same car type prefix (a with a, b with b, c with c)
+                if inner_id[0] != outer_id[0]:
+                    col_num = inner_id[1:]
+                    if col_num == outer_id[1:]:
+                        all_nums = [str(n) for n in range(1, 8) if str(n) != outer_id[1:]]
+                        col_num = all_nums[0]
+                    inner_id = f"{outer_id[0]}{col_num}"
+
                 double_layer_cars.append({"x": c_idx, "y": r_idx, "innerCarID": inner_id})
         # Connected cars
         for r_idx, cid in enumerate(col.get('tileConnectionIds', [])):
@@ -152,7 +224,7 @@ def convert_level(old_data: Dict[str, Any], seed: int = None) -> Tuple[Dict[str,
     colored_columns = []
     for idx, c in enumerate(restricted_colors):
         if c != -1:
-            car_id = color_map.get(c, assigned_ids[0] if assigned_ids else "a1")
+            car_id = color_map.get(c, color_map.get(unique_colors[0], "a1") if unique_colors else "a1")
             colored_columns.append({"index": idx, "carID": car_id})
 
     # WoodenBoxColumns: maps from columnRocked where rocked == 1

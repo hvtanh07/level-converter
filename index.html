@@ -640,37 +640,121 @@
             };
         }
 
-        function getBalancedCarIds(count, rng) {
+        function assignCarColors(uniqueColors, doubleLayerPairs, rng) {
             const types = ['a', 'b', 'c'];
-            const allPairs = [];
-            for (const t of types) {
-                for (let c = 1; c <= 7; c++) {
-                    allPairs.push(`${t}${c}`);
-                }
-            }
-
-            // Shuffle pairs
-            for (let i = allPairs.length - 1; i > 0; i--) {
+            // Shuffle types
+            for (let i = types.length - 1; i > 0; i--) {
                 const j = Math.floor(rng() * (i + 1));
-                [allPairs[i], allPairs[j]] = [allPairs[j], allPairs[i]];
+                [types[i], types[j]] = [types[j], types[i]];
             }
 
-            if (count <= allPairs.length) {
-                return allPairs.slice(0, count);
-            }
+            // Build connected components of double layer pairs
+            const adj = {};
+            doubleLayerPairs.forEach(([u, v]) => {
+                if (u !== 0 && v !== 0 && u !== v) {
+                    if (!adj[u]) adj[u] = new Set();
+                    if (!adj[v]) adj[v] = new Set();
+                    adj[u].add(v);
+                    adj[v].add(u);
+                }
+            });
 
-            const result = [...allPairs];
-            while (result.length < count) {
-                for (let i = allPairs.length - 1; i > 0; i--) {
+            const visited = new Set();
+            const components = [];
+            Object.keys(adj).map(Number).forEach(node => {
+                if (!visited.has(node)) {
+                    const comp = [];
+                    const q = [node];
+                    visited.add(node);
+                    while (q.length > 0) {
+                        const curr = q.pop();
+                        comp.push(curr);
+                        (adj[curr] || []).forEach(nxt => {
+                            if (!visited.has(nxt)) {
+                                visited.add(nxt);
+                                q.push(nxt);
+                            }
+                        });
+                    }
+                    components.push(comp);
+                }
+            });
+
+            const availableByType = {
+                a: [1, 2, 3, 4, 5, 6, 7],
+                b: [1, 2, 3, 4, 5, 6, 7],
+                c: [1, 2, 3, 4, 5, 6, 7]
+            };
+            ['a', 'b', 'c'].forEach(t => {
+                for (let i = availableByType[t].length - 1; i > 0; i--) {
                     const j = Math.floor(rng() * (i + 1));
-                    [allPairs[i], allPairs[j]] = [allPairs[j], allPairs[i]];
+                    [availableByType[t][i], availableByType[t][j]] = [availableByType[t][j], availableByType[t][i]];
                 }
-                for (const id of allPairs) {
-                    result.push(id);
-                    if (result.length === count) break;
+            });
+
+            const colorMap = { 0: "0" };
+            components.sort((a, b) => b.length - a.length);
+
+            let typeIdx = 0;
+            components.forEach(comp => {
+                if (comp.length <= 7) {
+                    let chosenType = null;
+                    for (let i = 0; i < 3; i++) {
+                        const t = types[typeIdx % 3];
+                        typeIdx++;
+                        if (availableByType[t].length >= comp.length) {
+                            chosenType = t;
+                            break;
+                        }
+                    }
+                    if (!chosenType) {
+                        chosenType = Object.keys(availableByType).reduce((a, b) => 
+                            availableByType[a].length > availableByType[b].length ? a : b
+                        );
+                    }
+
+                    comp.forEach(c => {
+                        if (colorMap[c] === undefined && availableByType[chosenType].length > 0) {
+                            const colNum = availableByType[chosenType].shift();
+                            colorMap[c] = `${chosenType}${colNum}`;
+                        }
+                    });
+                } else {
+                    comp.forEach(c => {
+                        if (colorMap[c] === undefined) {
+                            const chosenType = Object.keys(availableByType).reduce((a, b) => 
+                                availableByType[a].length > availableByType[b].length ? a : b
+                            );
+                            if (availableByType[chosenType].length > 0) {
+                                const colNum = availableByType[chosenType].shift();
+                                colorMap[c] = `${chosenType}${colNum}`;
+                            }
+                        }
+                    });
                 }
+            });
+
+            const remaining = uniqueColors.filter(c => colorMap[c] === undefined);
+            const remPairs = [];
+            types.forEach(t => {
+                availableByType[t].forEach(num => {
+                    remPairs.push(`${t}${num}`);
+                });
+            });
+            for (let i = remPairs.length - 1; i > 0; i--) {
+                const j = Math.floor(rng() * (i + 1));
+                [remPairs[i], remPairs[j]] = [remPairs[j], remPairs[i]];
             }
-            return result;
+
+            remaining.forEach((c, idx) => {
+                if (idx < remPairs.length) {
+                    colorMap[c] = remPairs[idx];
+                } else {
+                    colorMap[c] = `${types[idx % 3]}${(idx % 7) + 1}`;
+                }
+            });
+
+            return colorMap;
         }
 
         function convertLevel(oldData, customSeed = null) {
@@ -700,17 +784,27 @@
             const rockedColumns = data.columnRocked || [];
             const benchStartColor = data.benchStartColor !== undefined ? data.benchStartColor : 0;
 
-            // Collect unique colors excluding 0, including inner colors
+            // Collect unique colors and double layer pairs
             const uniqueColors = [];
+            const doubleLayerPairs = [];
             for (const col of columns) {
-                for (const t of (col.tiles || [])) {
+                const tiles = col.tiles || [];
+                const inners = col.tileInnerColors || [];
+                for (const t of tiles) {
                     if (t !== 0 && !uniqueColors.includes(t)) {
                         uniqueColors.push(t);
                     }
                 }
-                for (const ic of (col.tileInnerColors || [])) {
+                for (const ic of inners) {
                     if (ic !== -1 && ic !== 0 && !uniqueColors.includes(ic)) {
                         uniqueColors.push(ic);
+                    }
+                }
+                for (let i = 0; i < inners.length; i++) {
+                    const ic = inners[i];
+                    const t = i < tiles.length ? tiles[i] : 0;
+                    if (ic !== -1 && t !== 0 && ic !== 0) {
+                        doubleLayerPairs.push([t, ic]);
                     }
                 }
             }
@@ -721,15 +815,11 @@
             const rngSeed = customSeed !== null ? customSeed : levelNum;
             const rng = createRng(rngSeed);
 
-            const assignedIds = getBalancedCarIds(uniqueColors.length, rng);
-            const colorMap = { 0: "0" };
-            uniqueColors.forEach((c, idx) => {
-                colorMap[c] = assignedIds[idx];
-            });
+            const colorMap = assignCarColors(uniqueColors, doubleLayerPairs, rng);
 
             let dummyType = colorMap[benchStartColor];
             if (dummyType === undefined) {
-                dummyType = assignedIds.length > 0 ? assignedIds[0] : "a1";
+                dummyType = colorMap[uniqueColors[0]] || "a1";
             }
 
             // Map rows:
@@ -753,16 +843,30 @@
             const connGroups = {};
 
             columns.forEach((col, cIdx) => {
+                const tiles = col.tiles || [];
+                const inners = col.tileInnerColors || [];
                 // Hidden
                 (col.tilesHidden || []).forEach((h, rIdx) => {
                     if (h === 1) {
                         hiddenCars.push({ x: cIdx, y: rIdx });
                     }
                 });
-                // Double layer
-                (col.tileInnerColors || []).forEach((ic, rIdx) => {
+                // Double layer: enforce same car model: a with a, b with b
+                inners.forEach((ic, rIdx) => {
                     if (ic !== -1) {
-                        const innerId = colorMap[ic] || (assignedIds.length > 0 ? assignedIds[0] : "a1");
+                        const outerTile = rIdx < tiles.length ? tiles[rIdx] : 0;
+                        const outerId = colorMap[outerTile] || "a1";
+                        let innerId = colorMap[ic] || "a1";
+
+                        if (innerId[0] !== outerId[0]) {
+                            let colNum = innerId.slice(1);
+                            if (colNum === outerId.slice(1)) {
+                                const allNums = [1, 2, 3, 4, 5, 6, 7].map(String).filter(n => n !== outerId.slice(1));
+                                colNum = allNums[0];
+                            }
+                            innerId = `${outerId[0]}${colNum}`;
+                        }
+
                         doubleLayerCars.push({ x: cIdx, y: rIdx, innerCarID: innerId });
                     }
                 });
@@ -795,7 +899,7 @@
             const coloredColumns = [];
             restrictedColors.forEach((c, idx) => {
                 if (c !== -1) {
-                    const carId = colorMap[c] || (assignedIds.length > 0 ? assignedIds[0] : "a1");
+                    const carId = colorMap[c] || (uniqueColors.length > 0 ? colorMap[uniqueColors[0]] : "a1");
                     coloredColumns.push({ index: idx, carID: carId });
                 }
             });

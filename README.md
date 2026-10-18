@@ -81,6 +81,6 @@ node convert.js "path/to/levels" -o all_levels.zip --dir ./output_json/
 | **Colored Roads** | `columnRestrictedColors` | `ColoredColumnsLocation` | Array of `{ "index": col, "carID": mapped_car_id }` for entries `!= -1` |
 | **Wooden Box** | `columnRocked` | `WoodenBoxColumns` | Array of `{ "index": col }` for rocked columns |
 | **Connected Cars**| `columns[].tileConnectionIds` | `ConnectedCars` | Grouped array of `{ "connectionID": id, "cars": [{ "x": col, "y": row }] }` |
-| **Double Layer** | `columns[].tileInnerColors` | `DoubleLayerCars` | Array of `{ "x": col, "y": row, "innerCarID": carID }` |
+| **Double Layer** | `columns[].tileInnerColors` | `DoubleLayerCars` | Array of `{ "x": col, "y": row, "innerCarID": carID }`; inner & outer cars share the same car model (`a` with `a`, `b` with `b`) with distinct colors |
 | **unlockFeature** | — | Skipped | Omitted from output config |
 | **Extra Columns** | — | `ExtraColumnsCount: 0` | Default 0 |
