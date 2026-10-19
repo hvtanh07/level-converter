@@ -495,10 +495,197 @@
         }
 
         /* Color classes for car IDs */
-        .car-a { border-color: #38bdf8; color: #bae6fd; }
-        .car-b { border-color: #4ade80; color: #bbf7d0; }
-        .car-c { border-color: #f472b6; color: #fbcfe8; }
-        .car-0 { border-color: #64748b; color: #94a3b8; }
+        .car-a { border-color: #38bdf8; color: #bae6fd; background: rgba(56, 189, 248, 0.12); }
+        .car-b { border-color: #4ade80; color: #bbf7d0; background: rgba(74, 222, 128, 0.12); }
+        .car-c { border-color: #f472b6; color: #fbcfe8; background: rgba(244, 114, 182, 0.12); }
+        .car-0 { 
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.25), rgba(245, 158, 11, 0.25), rgba(16, 185, 129, 0.25), rgba(59, 130, 246, 0.25)) !important;
+            border-color: #cbd5e1 !important; 
+            color: #ffffff !important; 
+            font-weight: 800;
+        }
+
+        /* Nav Tabs */
+        .nav-tabs {
+            display: inline-flex;
+            gap: 6px;
+            background: rgba(15, 23, 42, 0.7);
+            padding: 4px;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-color);
+        }
+
+        .nav-tab {
+            padding: 8px 18px;
+            border-radius: 8px;
+            font-size: 0.88rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-tab:hover {
+            color: var(--text-primary);
+            background: rgba(51, 65, 85, 0.4);
+        }
+
+        .nav-tab.active {
+            background: var(--accent-blue);
+            color: #0f172a;
+            box-shadow: 0 2px 10px rgba(56, 189, 248, 0.35);
+        }
+
+        /* Previewer Styles */
+        .previewer-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+        }
+
+        .code-textarea {
+            width: 100%;
+            height: 175px;
+            background: #0b1120;
+            color: #38bdf8;
+            font-family: "Fira Code", Consolas, Monaco, monospace;
+            font-size: 0.88rem;
+            line-height: 1.45;
+            padding: 16px;
+            border-radius: var(--radius-md);
+            border: 1px solid #334155;
+            outline: none;
+            resize: vertical;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .code-textarea:focus {
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.2);
+        }
+
+        .preview-status {
+            padding: 10px 16px;
+            border-radius: var(--radius-md);
+            font-size: 0.88rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .preview-status-ok {
+            background: rgba(74, 222, 128, 0.12);
+            border: 1px solid rgba(74, 222, 128, 0.3);
+            color: #4ade80;
+        }
+
+        .preview-status-err {
+            background: rgba(239, 68, 68, 0.12);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #f87171;
+        }
+
+        .preview-status-idle {
+            background: rgba(148, 163, 184, 0.1);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            color: var(--text-secondary);
+        }
+
+        .preview-layout {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 24px;
+        }
+
+        @media (min-width: 1080px) {
+            .preview-layout {
+                grid-template-columns: 1.35fr 1fr;
+            }
+        }
+
+        .board-card {
+            background: #0b1120;
+            border-radius: var(--radius-md);
+            padding: 24px;
+            border: 1px solid #334155;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            align-items: center;
+            overflow-x: auto;
+        }
+
+        .board-row-labeled {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .board-row-label {
+            font-family: monospace;
+            font-size: 0.74rem;
+            color: var(--text-muted);
+            width: 34px;
+            text-align: right;
+            user-select: none;
+            font-weight: 600;
+        }
+
+        .bench-display {
+            background: rgba(30, 41, 59, 0.7);
+            border: 1px dashed #475569;
+            border-radius: var(--radius-md);
+            padding: 14px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .inventory-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 10px;
+        }
+
+        .inventory-card {
+            background: #0b1120;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 10px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .inventory-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .element-detail-card {
+            background: #0b1120;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 14px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
     </style>
 </head>
 <body>
@@ -507,7 +694,15 @@
         <div class="header-title">
             <span style="font-size: 1.6rem;">🚗</span>
             <h1>Level Format Converter</h1>
-            <span class="badge-ver">v2.1</span>
+            <span class="badge-ver">v2.2</span>
+        </div>
+        <div class="nav-tabs">
+            <button class="nav-tab active" id="tab-btn-converter" onclick="switchTab('converter')">
+                📁 Batch Converter
+            </button>
+            <button class="nav-tab" id="tab-btn-previewer" onclick="switchTab('previewer')">
+                👁️ Level Previewer
+            </button>
         </div>
         <div>
             <button class="btn btn-primary" id="btn-header-export" style="display: none;" onclick="exportAllZip()">
@@ -518,81 +713,220 @@
 
     <div class="container">
 
-        <!-- Drag & Drop Area -->
-        <div class="dropzone" id="dropzone">
-            <div class="drop-icon">📥</div>
-            <div class="drop-title">Drop your old level JSON files here</div>
-            <div class="drop-subtitle">Upload multiple individual level files or select a folder</div>
-            <div class="button-group">
-                <button class="btn btn-primary" onclick="document.getElementById('file-input').click();">
-                    📁 Select JSON Files
-                </button>
-                <button class="btn" onclick="document.getElementById('folder-input').click();">
-                    📂 Select Folder
-                </button>
-                <input type="file" id="file-input" multiple accept=".json" style="display: none;">
-                <input type="file" id="folder-input" webkitdirectory directory multiple style="display: none;">
+        <!-- Batch Converter View -->
+        <div id="view-converter" style="display: flex; flex-direction: column; gap: 24px;">
+
+            <!-- Drag & Drop Area -->
+            <div class="dropzone" id="dropzone">
+                <div class="drop-icon">📥</div>
+                <div class="drop-title">Drop your old level JSON files here</div>
+                <div class="drop-subtitle">Upload multiple individual level files or select a folder</div>
+                <div class="button-group">
+                    <button class="btn btn-primary" onclick="document.getElementById('file-input').click();">
+                        📁 Select JSON Files
+                    </button>
+                    <button class="btn" onclick="document.getElementById('folder-input').click();">
+                        📂 Select Folder
+                    </button>
+                    <input type="file" id="file-input" multiple accept=".json" style="display: none;">
+                    <input type="file" id="folder-input" webkitdirectory directory multiple style="display: none;">
+                </div>
             </div>
+
+            <!-- Stats Bar (Hidden until files loaded) -->
+            <div class="stats-bar" id="stats-bar" style="display: none;">
+                <div class="stat-card">
+                    <span class="stat-label">Total Converted</span>
+                    <span class="stat-val" id="stat-total">0</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">Level Range</span>
+                    <span class="stat-val" id="stat-range" style="font-size: 1.25rem;">-</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">Total Moves</span>
+                    <span class="stat-val" id="stat-moves">0</span>
+                </div>
+                <div class="stat-card" style="grid-column: span 2;">
+                    <span class="stat-label">Elements Detected</span>
+                    <span class="stat-val" id="stat-features" style="font-size: 1rem; color: #4ade80;">-</span>
+                </div>
+            </div>
+
+            <!-- Toolbar (Hidden until files loaded) -->
+            <div class="toolbar" id="toolbar" style="display: none;">
+                <div class="toolbar-left">
+                    <input type="text" id="search-input" class="search-input" placeholder="🔍 Search level or name..." oninput="renderTable()">
+                    <button class="btn" onclick="rerollAllVariance()" title="Shuffle car type (a,b,c) and color variance mappings">
+                        🎲 Reroll Car Variance
+                    </button>
+                </div>
+                <div class="toolbar-right">
+                    <button class="btn btn-danger" onclick="clearAllFiles()">
+                        🗑 Clear All
+                    </button>
+                    <button class="btn btn-success" id="btn-export-zip" onclick="exportAllZip()">
+                        📦 Export All as ZIP
+                    </button>
+                </div>
+            </div>
+
+            <!-- Table View -->
+            <div class="table-container" id="table-container" style="display: none;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Source File</th>
+                            <th>Target File</th>
+                            <th>Level</th>
+                            <th>Grid Size</th>
+                            <th>Moves</th>
+                            <th>Dummy / Bench</th>
+                            <th>Elements</th>
+                            <th>Car Mappings</th>
+                            <th style="text-align: right;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="levels-tbody">
+                        <!-- Populated dynamically -->
+                    </tbody>
+                </table>
+            </div>
+
         </div>
 
-        <!-- Stats Bar (Hidden until files loaded) -->
-        <div class="stats-bar" id="stats-bar" style="display: none;">
-            <div class="stat-card">
-                <span class="stat-label">Total Converted</span>
-                <span class="stat-val" id="stat-total">0</span>
-            </div>
-            <div class="stat-card">
-                <span class="stat-label">Level Range</span>
-                <span class="stat-val" id="stat-range" style="font-size: 1.25rem;">-</span>
-            </div>
-            <div class="stat-card">
-                <span class="stat-label">Total Moves</span>
-                <span class="stat-val" id="stat-moves">0</span>
-            </div>
-            <div class="stat-card" style="grid-column: span 2;">
-                <span class="stat-label">Elements Detected</span>
-                <span class="stat-val" id="stat-features" style="font-size: 1rem; color: #4ade80;">-</span>
-            </div>
-        </div>
+        <!-- Level Previewer View -->
+        <div id="view-previewer" style="display: none; flex-direction: column; gap: 24px;">
 
-        <!-- Toolbar (Hidden until files loaded) -->
-        <div class="toolbar" id="toolbar" style="display: none;">
-            <div class="toolbar-left">
-                <input type="text" id="search-input" class="search-input" placeholder="🔍 Search level or name..." oninput="renderTable()">
-                <button class="btn" onclick="rerollAllVariance()" title="Shuffle car type (a,b,c) and color variance mappings">
-                    🎲 Reroll Car Variance
-                </button>
-            </div>
-            <div class="toolbar-right">
-                <button class="btn btn-danger" onclick="clearAllFiles()">
-                    🗑 Clear All
-                </button>
-                <button class="btn btn-success" id="btn-export-zip" onclick="exportAllZip()">
-                    📦 Export All as ZIP
-                </button>
-            </div>
-        </div>
+            <!-- Input Card -->
+            <div class="previewer-card">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+                    <div>
+                        <h2 style="font-size: 1.15rem; font-weight: 700; display: flex; align-items: center; gap: 8px;">
+                            <span>👁️</span> Level Data Previewer
+                        </h2>
+                        <div style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 2px;">
+                            Paste or load new format level JSON to visually inspect the board, elements, and car balance
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
+                        <button class="btn btn-primary" onclick="pasteFromClipboard()">
+                            📋 Paste from Clipboard
+                        </button>
+                        <button class="btn" onclick="document.getElementById('previewer-file-input').click()">
+                            📂 Load JSON File
+                        </button>
+                        <input type="file" id="previewer-file-input" accept=".json" style="display: none;" onchange="handlePreviewerFile(event)">
+                        
+                        <!-- Sample Level Selector -->
+                        <div style="display: flex; align-items: center; gap: 6px; background: var(--bg-tertiary); padding: 4px 8px; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+                            <span style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600;">Sample:</span>
+                            <select id="previewer-sample-select" style="background: transparent; color: var(--text-primary); border: none; font-size: 0.82rem; outline: none; cursor: pointer;" onchange="loadSampleLevel(this.value)">
+                                <option value="" disabled selected>Select Sample...</option>
+                                <option value="55">Level 55 (Double Layer Cars, 4x4)</option>
+                                <option value="25">Level 25 (Connected Cars, 3x4)</option>
+                                <option value="45">Level 45 (Wooden Box, 4x6)</option>
+                                <option value="34">Level 34 (Locked + Hidden, 7x6)</option>
+                                <option value="35">Level 35 (Colored Roads + Dummy, 4x6)</option>
+                            </select>
+                        </div>
 
-        <!-- Table View -->
-        <div class="table-container" id="table-container" style="display: none;">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Source File</th>
-                        <th>Target File</th>
-                        <th>Level</th>
-                        <th>Grid Size</th>
-                        <th>Moves</th>
-                        <th>Dummy / Bench</th>
-                        <th>Elements</th>
-                        <th>Car Mappings</th>
-                        <th style="text-align: right;">Action</th>
-                    </tr>
-                </thead>
-                <tbody id="levels-tbody">
-                    <!-- Populated dynamically -->
-                </tbody>
-            </table>
+                        <button class="btn btn-danger" onclick="clearPreviewer()" title="Clear textarea and board">
+                            🧹 Clear
+                        </button>
+                    </div>
+                </div>
+
+                <textarea id="previewer-json-input" class="code-textarea" placeholder="Paste FormatVersion 2 Level JSON here (e.g. { &quot;FormatVersion&quot;: 2, &quot;MapLevel&quot;: 55, ... })" oninput="onPreviewerInput()"></textarea>
+
+                <div id="previewer-status" class="preview-status preview-status-idle">
+                    <span>💡</span> Paste level JSON or select a sample level above to inspect.
+                </div>
+            </div>
+
+            <!-- Preview Render Area (Shown when JSON is valid) -->
+            <div id="previewer-render-container" style="display: none; flex-direction: column; gap: 24px;">
+
+                <!-- Stats Bar -->
+                <div class="stats-bar">
+                    <div class="stat-card">
+                        <span class="stat-label">Level Number</span>
+                        <span class="stat-val" id="prev-stat-level">0</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-label">Grid Size</span>
+                        <span class="stat-val" id="prev-stat-grid" style="font-size: 1.25rem;">0 × 0</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-label">Max Moves</span>
+                        <span class="stat-val" id="prev-stat-moves">0</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-label">Bench Car (Dummy)</span>
+                        <div id="prev-stat-dummy" style="display: flex; align-items: center; gap: 6px; margin-top: 4px;"></div>
+                    </div>
+                    <div class="stat-card" style="grid-column: span 2;">
+                        <span class="stat-label">Detected Elements</span>
+                        <div id="prev-stat-elements" style="display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px;"></div>
+                    </div>
+                </div>
+
+                <!-- 2-Column Board and Details Grid -->
+                <div class="preview-layout">
+                    
+                    <!-- Left: Visual Board -->
+                    <div class="previewer-card" style="padding: 20px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                            <h3 style="font-size: 0.95rem; font-weight: 700; color: var(--text-secondary);">
+                                🎮 Visual Board Layout
+                            </h3>
+                            <span style="font-size: 0.75rem; color: var(--text-muted);">
+                                Top: Y = Max &nbsp;|&nbsp; Bottom: Y = 0
+                            </span>
+                        </div>
+
+                        <div class="board-card" id="prev-board-card">
+                            <!-- Board rendered dynamically -->
+                        </div>
+
+                        <!-- Bench Display -->
+                        <div class="bench-display" id="prev-bench-display">
+                            <!-- Populated dynamically -->
+                        </div>
+                    </div>
+
+                    <!-- Right: Inventory & Elements Analysis -->
+                    <div style="display: flex; flex-direction: column; gap: 20px;">
+
+                        <!-- Car Inventory Card -->
+                        <div class="previewer-card" style="padding: 20px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <h3 style="font-size: 0.95rem; font-weight: 700; color: var(--text-secondary);">
+                                    🚗 Car Inventory & Modulo-3 Balance
+                                </h3>
+                                <span class="pill pill-blue" id="prev-total-cars-pill">0 Cars Total</span>
+                            </div>
+                            <div class="inventory-grid" id="prev-inventory-grid">
+                                <!-- Inventory cards rendered dynamically -->
+                            </div>
+                        </div>
+
+                        <!-- Special Elements Details Card -->
+                        <div class="previewer-card" style="padding: 20px;">
+                            <h3 style="font-size: 0.95rem; font-weight: 700; color: var(--text-secondary); margin-bottom: 4px;">
+                                🧩 Element Details & Coordinates
+                            </h3>
+                            <div id="prev-elements-breakdown" style="display: flex; flex-direction: column; gap: 10px;">
+                                <!-- Detailed breakdowns -->
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
         </div>
 
     </div>
@@ -621,6 +955,7 @@
                 </div>
             </div>
             <div class="modal-footer">
+                <button class="btn btn-success" onclick="openCurrentInPreviewer()">👁 Open in Previewer</button>
                 <button class="btn" onclick="closeModal()">Close</button>
                 <button class="btn btn-primary" id="modal-download-btn">⬇ Download JSON</button>
             </div>
@@ -1341,6 +1676,535 @@
             } finally {
                 btn.innerHTML = originalText;
                 btn.disabled = false;
+            }
+        }
+
+        // Tab switching
+        function switchTab(tabName) {
+            const btnConverter = document.getElementById('tab-btn-converter');
+            const btnPreviewer = document.getElementById('tab-btn-previewer');
+            const viewConverter = document.getElementById('view-converter');
+            const viewPreviewer = document.getElementById('view-previewer');
+            const headerExport = document.getElementById('btn-header-export');
+
+            if (tabName === 'converter') {
+                btnConverter.classList.add('active');
+                btnPreviewer.classList.remove('active');
+                viewConverter.style.display = 'flex';
+                viewPreviewer.style.display = 'none';
+                if (loadedLevels.length > 0) {
+                    headerExport.style.display = 'inline-flex';
+                }
+            } else {
+                btnPreviewer.classList.add('active');
+                btnConverter.classList.remove('active');
+                viewConverter.style.display = 'none';
+                viewPreviewer.style.display = 'flex';
+                headerExport.style.display = 'none';
+            }
+        }
+
+        function openCurrentInPreviewer() {
+            if (!activeModalLevel) return;
+            const jsonStr = JSON.stringify(activeModalLevel.newConfig, null, 4);
+            document.getElementById('previewer-json-input').value = jsonStr;
+            closeModal();
+            switchTab('previewer');
+            onPreviewerInput();
+        }
+
+        // Built-in Sample Levels for Instant Testing
+        const SAMPLE_LEVELS = {
+            "55": {
+                name: "Level 55 (Double Layer Cars, 4x4)",
+                data: {"FormatVersion": 2, "MapLevel": 55, "NumQueue": 4, "NumPerRow": 4, "ExtraColumnsCount": 0, "MaxMove": 60, "Map": ["c2,c4,c3,c6", "c4,c2,c6,c3", "c6,c4,c2,c1", "c6,c3,c1,c1"], "DummyType": "0", "HiddenColorCar": [], "LockedColumns": [], "ColoredColumnsLocation": [], "WoodenBoxColumns": [], "ConnectedCars": [], "DoubleLayerCars": [{"x": 0, "y": 0, "innerCarID": "c1"}, {"x": 0, "y": 1, "innerCarID": "c4"}, {"x": 2, "y": 2, "innerCarID": "c3"}, {"x": 3, "y": 3, "innerCarID": "c2"}]}
+            },
+            "25": {
+                name: "Level 25 (Connected Cars, 3x4)",
+                data: {"FormatVersion": 2, "MapLevel": 25, "NumQueue": 3, "NumPerRow": 4, "ExtraColumnsCount": 0, "MaxMove": 35, "Map": ["a4,c5,a3", "a4,a4,a3", "c5,a3,a4", "a3,c5,c5"], "DummyType": "0", "HiddenColorCar": [], "LockedColumns": [], "ColoredColumnsLocation": [], "WoodenBoxColumns": [], "ConnectedCars": [{"connectionID": 1, "cars": [{"x": 1, "y": 1}, {"x": 2, "y": 1}]}], "DoubleLayerCars": []}
+            },
+            "45": {
+                name: "Level 45 (Wooden Box, 4x6)",
+                data: {"FormatVersion": 2, "MapLevel": 45, "NumQueue": 4, "NumPerRow": 6, "ExtraColumnsCount": 0, "MaxMove": 30, "Map": ["c5,a4,a3,b3", "c5,a4,a3,b3", "c5,b3,a3,b3", "a3,b3,c5,a4", "c5,a4,c5,b3", "a3,a4,a3,a4"], "DummyType": "0", "HiddenColorCar": [], "LockedColumns": [], "ColoredColumnsLocation": [], "WoodenBoxColumns": [{"index": 2}], "ConnectedCars": [], "DoubleLayerCars": []}
+            },
+            "34": {
+                name: "Level 34 (Locked + Hidden, 7x6)",
+                data: {"FormatVersion": 2, "MapLevel": 34, "NumQueue": 7, "NumPerRow": 6, "ExtraColumnsCount": 0, "MaxMove": 55, "Map": ["a4,a4,b5,a4,b5,b3,b3", "c5,a5,a4,c5,c4,c4,c4", "a3,b3,a5,a3,a3,a5,a5", "c5,b5,c4,c5,a5,b5,b5", "a3,b3,c4,b3,b3,b5,c4", "a3,c5,a4,a5,c5,a4,a3"], "DummyType": "0", "HiddenColorCar": [{"x": 4, "y": 3}, {"x": 4, "y": 4}], "LockedColumns": [{"index": 0, "counter": 2}], "ColoredColumnsLocation": [], "WoodenBoxColumns": [], "ConnectedCars": [{"connectionID": 1, "cars": [{"x": 5, "y": 4}, {"x": 6, "y": 4}]}, {"connectionID": 2, "cars": [{"x": 5, "y": 2}, {"x": 6, "y": 2}]}], "DoubleLayerCars": []}
+            },
+            "35": {
+                name: "Level 35 (Colored Roads + Dummy, 4x6)",
+                data: {"FormatVersion": 2, "MapLevel": 35, "NumQueue": 4, "NumPerRow": 6, "ExtraColumnsCount": 0, "MaxMove": 40, "Map": ["b3,a3,c5,0", "b3,b3,a4,a4", "a4,c5,c5,a4", "a4,c5,b3,b3", "c5,b3,a3,a3", "a3,a4,a3,a3"], "DummyType": "c5", "HiddenColorCar": [], "LockedColumns": [], "ColoredColumnsLocation": [{"index": 0, "carID": "c5"}, {"index": 3, "carID": "a3"}], "WoodenBoxColumns": [], "ConnectedCars": [], "DoubleLayerCars": []}
+            }
+        };
+
+        function loadSampleLevel(key) {
+            if (!key || !SAMPLE_LEVELS[key]) return;
+            const sample = SAMPLE_LEVELS[key];
+            const jsonStr = JSON.stringify(sample.data, null, 4);
+            document.getElementById('previewer-json-input').value = jsonStr;
+            onPreviewerInput();
+        }
+
+        function pasteFromClipboard() {
+            if (!navigator.clipboard || !navigator.clipboard.readText) {
+                alert("Clipboard API not available in this browser. Please paste directly into the text area.");
+                return;
+            }
+            navigator.clipboard.readText().then(text => {
+                if (!text || !text.trim()) {
+                    alert("Clipboard is empty.");
+                    return;
+                }
+                document.getElementById('previewer-json-input').value = text;
+                onPreviewerInput();
+            }).catch(err => {
+                console.error("Paste error:", err);
+                alert("Could not access clipboard: " + err.message);
+            });
+        }
+
+        function handlePreviewerFile(event) {
+            const file = event.target.files?.[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                document.getElementById('previewer-json-input').value = e.target.result;
+                onPreviewerInput();
+            };
+            reader.readAsText(file);
+            event.target.value = '';
+        }
+
+        function clearPreviewer() {
+            document.getElementById('previewer-json-input').value = '';
+            document.getElementById('previewer-sample-select').value = '';
+            document.getElementById('previewer-render-container').style.display = 'none';
+            const status = document.getElementById('previewer-status');
+            status.className = 'preview-status preview-status-idle';
+            status.innerHTML = '<span>💡</span> Paste level JSON or select a sample level above to inspect.';
+        }
+
+        function onPreviewerInput() {
+            const input = document.getElementById('previewer-json-input').value.trim();
+            const status = document.getElementById('previewer-status');
+            const renderContainer = document.getElementById('previewer-render-container');
+
+            if (!input) {
+                renderContainer.style.display = 'none';
+                status.className = 'preview-status preview-status-idle';
+                status.innerHTML = '<span>💡</span> Paste level JSON or select a sample level above to inspect.';
+                return;
+            }
+
+            let parsed;
+            try {
+                parsed = JSON.parse(input);
+            } catch (err) {
+                renderContainer.style.display = 'none';
+                status.className = 'preview-status preview-status-err';
+                status.innerHTML = `<span>⚠️</span> <strong>Invalid JSON:</strong> ${err.message}`;
+                return;
+            }
+
+            // Check if old format level pasted by mistake
+            const isOldFormat = parsed.columnRestrictedColors !== undefined ||
+                                parsed.columnRocked !== undefined ||
+                                parsed.tileConnectionIds !== undefined ||
+                                (parsed.data && parsed.data.columnRestrictedColors !== undefined) ||
+                                (Array.isArray(parsed.Map) && Array.isArray(parsed.Map[0]) && typeof parsed.Map[0][0] === 'number');
+
+            if (isOldFormat) {
+                try {
+                    const { newConfig } = convertLevel(parsed, 12345);
+                    renderLevelPreview(newConfig, "Detected old level format — automatically converted for preview!");
+                    return;
+                } catch (convErr) {
+                    renderContainer.style.display = 'none';
+                    status.className = 'preview-status preview-status-err';
+                    status.innerHTML = `<span>⚠️</span> Failed to convert old format JSON: ${convErr.message}`;
+                    return;
+                }
+            }
+
+            // Validate new format level
+            if (!Array.isArray(parsed.Map)) {
+                renderContainer.style.display = 'none';
+                status.className = 'preview-status preview-status-err';
+                status.innerHTML = `<span>⚠️</span> Missing or invalid "Map" array in level JSON.`;
+                return;
+            }
+
+            renderLevelPreview(parsed);
+        }
+
+        function renderLevelPreview(cfg, notice) {
+            const status = document.getElementById('previewer-status');
+            const renderContainer = document.getElementById('previewer-render-container');
+
+            status.className = 'preview-status preview-status-ok';
+            status.innerHTML = `<span>✅</span> <strong>Valid Level JSON:</strong> Level ${cfg.MapLevel ?? '?'} (${cfg.NumQueue || cfg.Map[0]?.split(',').length} cols × ${cfg.NumPerRow || cfg.Map.length} rows)${notice ? ` — <em>${notice}</em>` : ''}`;
+
+            renderContainer.style.display = 'flex';
+
+            const numCols = cfg.NumQueue || (cfg.Map[0] ? cfg.Map[0].split(',').length : 0);
+            const numRows = cfg.NumPerRow || cfg.Map.length;
+
+            // Stats Bar
+            document.getElementById('prev-stat-level').textContent = cfg.MapLevel ?? '-';
+            document.getElementById('prev-stat-grid').textContent = `${numCols} cols × ${numRows} rows`;
+            document.getElementById('prev-stat-moves').textContent = cfg.MaxMove ?? '-';
+
+            // Dummy Bench Car
+            const dummyElem = document.getElementById('prev-stat-dummy');
+            const dummyType = cfg.DummyType || "0";
+            dummyElem.innerHTML = `
+                <span class="car-badge car-${dummyType[0] || '0'}" style="font-size: 0.95rem; padding: 2px 8px;">${dummyType}</span>
+                ${dummyType === '0' ? '<span class="pill pill-purple">🌈 Rainbow</span>' : '<span class="pill pill-blue">Bench Car</span>'}
+            `;
+
+            // Detected Elements Pills
+            const elementsElem = document.getElementById('prev-stat-elements');
+            const pills = [];
+            if (cfg.HiddenColorCar && cfg.HiddenColorCar.length > 0) {
+                pills.push(`<span class="pill pill-rose">👁 ${cfg.HiddenColorCar.length} Hidden</span>`);
+            }
+            if (cfg.LockedColumns && cfg.LockedColumns.length > 0) {
+                pills.push(`<span class="pill pill-blue">❄ ${cfg.LockedColumns.length} Locked</span>`);
+            }
+            if (cfg.ColoredColumnsLocation && cfg.ColoredColumnsLocation.length > 0) {
+                pills.push(`<span class="pill pill-purple">🎯 ${cfg.ColoredColumnsLocation.length} Road</span>`);
+            }
+            if (cfg.WoodenBoxColumns && cfg.WoodenBoxColumns.length > 0) {
+                pills.push(`<span class="pill pill-amber">📦 ${cfg.WoodenBoxColumns.length} Box</span>`);
+            }
+            if (cfg.ConnectedCars && cfg.ConnectedCars.length > 0) {
+                pills.push(`<span class="pill pill-orange">🔗 ${cfg.ConnectedCars.length} Groups</span>`);
+            }
+            if (cfg.DoubleLayerCars && cfg.DoubleLayerCars.length > 0) {
+                pills.push(`<span class="pill pill-green">🧬 ${cfg.DoubleLayerCars.length} Double</span>`);
+            }
+            if (pills.length === 0) {
+                pills.push(`<span class="pill pill-gray">Standard Level</span>`);
+            }
+            elementsElem.innerHTML = pills.join(' ');
+
+            // Board Render
+            renderPreviewBoard(cfg, numCols, numRows);
+
+            // Inventory & Modulo-3 Check
+            renderPreviewInventory(cfg);
+
+            // Elements Breakdown
+            renderPreviewElements(cfg);
+        }
+
+        function renderPreviewBoard(cfg, numCols, numRows) {
+            const board = document.getElementById('prev-board-card');
+            board.innerHTML = '';
+
+            const hiddenSet = new Set((cfg.HiddenColorCar || []).map(h => `${h.x},${h.y}`));
+            const doubleMap = new Map((cfg.DoubleLayerCars || []).map(d => [`${d.x},${d.y}`, d.innerCarID]));
+            const connMap = new Map();
+            (cfg.ConnectedCars || []).forEach(grp => {
+                grp.cars.forEach(c => connMap.set(`${c.x},${c.y}`, grp.connectionID));
+            });
+
+            const lockedCols = new Map((cfg.LockedColumns || []).map(l => [l.index, l.counter]));
+            const coloredCols = new Map((cfg.ColoredColumnsLocation || []).map(c => [c.index, c.carID]));
+            const boxCols = new Set((cfg.WoodenBoxColumns || []).map(b => b.index));
+
+            // Header indicators row
+            const headerRow = document.createElement('div');
+            headerRow.className = 'board-row-labeled';
+            
+            const blankLabel = document.createElement('div');
+            blankLabel.className = 'board-row-label';
+            headerRow.appendChild(blankLabel);
+
+            const indRow = document.createElement('div');
+            indRow.className = 'board-header-row';
+
+            for (let c = 0; c < numCols; c++) {
+                const ind = document.createElement('div');
+                ind.className = 'board-col-indicator';
+                let label = `C${c}`;
+                let subBadge = '';
+
+                if (boxCols.has(c)) {
+                    label = `📦 C${c}`;
+                    subBadge = `<span class="pill pill-amber" style="font-size: 0.65rem; padding: 1px 3px;">Box</span>`;
+                } else if (lockedCols.has(c)) {
+                    label = `❄ C${c}`;
+                    subBadge = `<span class="pill pill-blue" style="font-size: 0.65rem; padding: 1px 3px;">${lockedCols.get(c)} moves</span>`;
+                } else if (coloredCols.has(c)) {
+                    const carId = coloredCols.get(c);
+                    label = `🎯 C${c}`;
+                    subBadge = `<span class="car-badge car-${carId[0] || '0'}" style="font-size: 0.7rem; padding: 1px 3px;">${carId}</span>`;
+                }
+
+                ind.innerHTML = `<span>${label}</span>${subBadge}`;
+                indRow.appendChild(ind);
+            }
+            headerRow.appendChild(indRow);
+            board.appendChild(headerRow);
+
+            // Rows (top to bottom)
+            cfg.Map.forEach((rowStr, rIdx) => {
+                const y = numRows - 1 - rIdx;
+                const rowWrap = document.createElement('div');
+                rowWrap.className = 'board-row-labeled';
+
+                const rowLabel = document.createElement('div');
+                rowLabel.className = 'board-row-label';
+                rowLabel.textContent = `Y=${y}`;
+                rowWrap.appendChild(rowLabel);
+
+                const rowDiv = document.createElement('div');
+                rowDiv.className = 'board-row';
+
+                const cols = rowStr.split(',');
+                cols.forEach((carId, x) => {
+                    const key = `${x},${y}`;
+                    const cell = document.createElement('div');
+                    cell.className = `board-cell car-${carId[0] || '0'}`;
+
+                    let tooltip = `Location: (X: ${x}, Y: ${y})\nOuter Car: ${carId}`;
+
+                    if (hiddenSet.has(key)) {
+                        cell.classList.add('hidden-car');
+                        tooltip += `\nElement: Hidden Car (revealed when unlocked)`;
+                    }
+                    if (connMap.has(key)) {
+                        cell.classList.add('connected-car');
+                        const cid = connMap.get(key);
+                        cell.setAttribute('data-conn', cid);
+                        tooltip += `\nConnected Group: #${cid}`;
+                    }
+
+                    cell.textContent = carId;
+
+                    if (doubleMap.has(key)) {
+                        const innerId = doubleMap.get(key);
+                        const innerBadge = document.createElement('span');
+                        innerBadge.className = 'inner-badge';
+                        innerBadge.textContent = innerId;
+                        cell.appendChild(innerBadge);
+                        tooltip += `\nDouble Layer: Inner Car is ${innerId}`;
+                    }
+
+                    cell.title = tooltip;
+                    rowDiv.appendChild(cell);
+                });
+
+                rowWrap.appendChild(rowDiv);
+                board.appendChild(rowWrap);
+            });
+
+            // Bench display
+            const benchElem = document.getElementById('prev-bench-display');
+            const dummy = cfg.DummyType || '0';
+            benchElem.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <span style="font-weight: 600; font-size: 0.9rem; color: var(--text-secondary);">🚗 Starting Bench Slot:</span>
+                    <span class="car-badge car-${dummy[0] || '0'}" style="font-size: 1.05rem; padding: 3px 10px;">${dummy}</span>
+                </div>
+                <div>
+                    ${dummy === '0' 
+                        ? '<span class="pill pill-purple" style="font-size: 0.8rem; padding: 4px 10px;">🌈 Wildcard Rainbow Car — Clears any color queue</span>' 
+                        : '<span class="pill pill-blue" style="font-size: 0.8rem; padding: 4px 10px;">Starts directly on the player bench</span>'}
+                </div>
+            `;
+        }
+
+        function renderPreviewInventory(cfg) {
+            const grid = document.getElementById('prev-inventory-grid');
+            grid.innerHTML = '';
+
+            const outerCounts = {};
+            const innerCounts = {};
+
+            // Count outer cars
+            (cfg.Map || []).forEach(rowStr => {
+                rowStr.split(',').forEach(c => {
+                    const id = c.trim();
+                    if (id) {
+                        outerCounts[id] = (outerCounts[id] || 0) + 1;
+                    }
+                });
+            });
+
+            // Count inner cars from double layer
+            (cfg.DoubleLayerCars || []).forEach(d => {
+                const id = (d.innerCarID || "").trim();
+                if (id) {
+                    innerCounts[id] = (innerCounts[id] || 0) + 1;
+                }
+            });
+
+            const allCarIds = Array.from(new Set([...Object.keys(outerCounts), ...Object.keys(innerCounts)]));
+            allCarIds.sort((a, b) => {
+                if (a === '0') return -1;
+                if (b === '0') return 1;
+                return a.localeCompare(b);
+            });
+
+            let grandTotal = 0;
+            allCarIds.forEach(id => {
+                const outer = outerCounts[id] || 0;
+                const inner = innerCounts[id] || 0;
+                const total = outer + inner;
+                grandTotal += total;
+
+                const isMul3 = (total % 3 === 0);
+                const card = document.createElement('div');
+                card.className = 'inventory-card';
+
+                card.innerHTML = `
+                    <div class="inventory-header">
+                        <span class="car-badge car-${id[0] || '0'}" style="font-size: 0.88rem; padding: 2px 7px;">${id}</span>
+                        ${id === '0' 
+                            ? '<span class="pill pill-purple" style="font-size: 0.65rem;">Rainbow</span>' 
+                            : (isMul3 
+                                ? `<span class="pill pill-green" style="font-size: 0.68rem;" title="${total / 3} complete set(s) of 3">✓ ${total / 3} set(s)</span>` 
+                                : `<span class="pill pill-rose" style="font-size: 0.68rem;" title="Remainder: ${total % 3}">⚠️ Rem: ${total % 3}</span>`)}
+                    </div>
+                    <div style="font-size: 1.15rem; font-weight: 700; color: var(--text-primary); margin-top: 2px;">
+                        ${total} <span style="font-size: 0.72rem; color: var(--text-muted); font-weight: 500;">cars</span>
+                    </div>
+                    <div style="font-size: 0.72rem; color: var(--text-secondary);">
+                        ${outer} outer${inner > 0 ? ` + ${inner} inner` : ''}
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+
+            document.getElementById('prev-total-cars-pill').textContent = 
+                `${grandTotal} Total Cars (${allCarIds.length} Types)`;
+        }
+
+        function renderPreviewElements(cfg) {
+            const container = document.getElementById('prev-elements-breakdown');
+            container.innerHTML = '';
+
+            let hasAny = false;
+
+            // Double Layer Cars
+            if (cfg.DoubleLayerCars && cfg.DoubleLayerCars.length > 0) {
+                hasAny = true;
+                const card = document.createElement('div');
+                card.className = 'element-detail-card';
+                const items = cfg.DoubleLayerCars.map(d => {
+                    return `<span class="pill pill-green" style="font-size: 0.75rem;">(X:${d.x}, Y:${d.y}) ➔ Inner: <strong>${d.innerCarID}</strong></span>`;
+                }).join(' ');
+                card.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span style="font-weight: 700; color: #4ade80;">🧬 Double Layer Cars (${cfg.DoubleLayerCars.length})</span>
+                        <span style="font-size: 0.72rem; color: var(--text-muted);">Inner car hidden beneath outer car</span>
+                    </div>
+                    <div style="display: flex; flex-wrap: wrap; gap: 6px;">${items}</div>
+                `;
+                container.appendChild(card);
+            }
+
+            // Connected Cars
+            if (cfg.ConnectedCars && cfg.ConnectedCars.length > 0) {
+                hasAny = true;
+                const card = document.createElement('div');
+                card.className = 'element-detail-card';
+                const items = cfg.ConnectedCars.map(grp => {
+                    const coords = grp.cars.map(c => `(${c.x}, ${c.y})`).join(' + ');
+                    return `<div style="background: rgba(30, 41, 59, 0.6); padding: 5px 10px; border-radius: 6px; font-size: 0.78rem;">
+                        <strong style="color: var(--accent-orange);">Group #${grp.connectionID}:</strong> ${coords}
+                    </div>`;
+                }).join('');
+                card.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span style="font-weight: 700; color: #fb923c;">🔗 Connected Car Groups (${cfg.ConnectedCars.length})</span>
+                        <span style="font-size: 0.72rem; color: var(--text-muted);">Tied cars that move together</span>
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 4px;">${items}</div>
+                `;
+                container.appendChild(card);
+            }
+
+            // Locked Columns
+            if (cfg.LockedColumns && cfg.LockedColumns.length > 0) {
+                hasAny = true;
+                const card = document.createElement('div');
+                card.className = 'element-detail-card';
+                const items = cfg.LockedColumns.map(l => {
+                    return `<span class="pill pill-blue" style="font-size: 0.78rem;">Column C${l.index}: <strong>${l.counter} moves</strong></span>`;
+                }).join(' ');
+                card.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span style="font-weight: 700; color: #38bdf8;">❄️ Locked Columns (${cfg.LockedColumns.length})</span>
+                        <span style="font-size: 0.72rem; color: var(--text-muted);">Unlocks after N player moves</span>
+                    </div>
+                    <div style="display: flex; flex-wrap: wrap; gap: 6px;">${items}</div>
+                `;
+                container.appendChild(card);
+            }
+
+            // Colored Columns Location
+            if (cfg.ColoredColumnsLocation && cfg.ColoredColumnsLocation.length > 0) {
+                hasAny = true;
+                const card = document.createElement('div');
+                card.className = 'element-detail-card';
+                const items = cfg.ColoredColumnsLocation.map(c => {
+                    return `<span class="pill pill-purple" style="font-size: 0.78rem;">Column C${c.index} ➔ Only: <strong class="car-badge car-${c.carID[0] || '0'}">${c.carID}</strong></span>`;
+                }).join(' ');
+                card.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span style="font-weight: 700; color: #c084fc;">🎯 Colored Columns / Road Restrictions (${cfg.ColoredColumnsLocation.length})</span>
+                        <span style="font-size: 0.72rem; color: var(--text-muted);">Column accepts only specified car color</span>
+                    </div>
+                    <div style="display: flex; flex-wrap: wrap; gap: 6px;">${items}</div>
+                `;
+                container.appendChild(card);
+            }
+
+            // Wooden Box Columns
+            if (cfg.WoodenBoxColumns && cfg.WoodenBoxColumns.length > 0) {
+                hasAny = true;
+                const card = document.createElement('div');
+                card.className = 'element-detail-card';
+                const items = cfg.WoodenBoxColumns.map(b => {
+                    return `<span class="pill pill-amber" style="font-size: 0.78rem;">Column C${b.index}: 📦 Blocked by Box</span>`;
+                }).join(' ');
+                card.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span style="font-weight: 700; color: #fbbf24;">📦 Wooden Box Columns (${cfg.WoodenBoxColumns.length})</span>
+                        <span style="font-size: 0.72rem; color: var(--text-muted);">Column blocked until box is cleared</span>
+                    </div>
+                    <div style="display: flex; flex-wrap: wrap; gap: 6px;">${items}</div>
+                `;
+                container.appendChild(card);
+            }
+
+            // Hidden Cars
+            if (cfg.HiddenColorCar && cfg.HiddenColorCar.length > 0) {
+                hasAny = true;
+                const card = document.createElement('div');
+                card.className = 'element-detail-card';
+                const items = cfg.HiddenColorCar.map(h => {
+                    return `<span class="pill pill-rose" style="font-size: 0.75rem;">(X:${h.x}, Y:${h.y})</span>`;
+                }).join(' ');
+                card.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span style="font-weight: 700; color: #fb7185;">👁️ Hidden Color Cars (${cfg.HiddenColorCar.length})</span>
+                        <span style="font-size: 0.72rem; color: var(--text-muted);">Color is masked until reached</span>
+                    </div>
+                    <div style="display: flex; flex-wrap: wrap; gap: 6px;">${items}</div>
+                `;
+                container.appendChild(card);
+            }
+
+            if (!hasAny) {
+                container.innerHTML = `
+                    <div style="text-align: center; color: var(--text-muted); padding: 18px; font-size: 0.88rem;">
+                        ✨ Standard level — No special obstacle elements configured.
+                    </div>
+                `;
             }
         }
     </script>
