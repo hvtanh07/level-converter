@@ -49,10 +49,11 @@ Double-click `start_tool.bat` (or open [`index.html`](file:///c:/Users/TUAN%20AN
      - `_6`: Orange 🟠
      - `_7`: White ⚪
      - `0`: Rainbow Wildcard 🌈
-   - **📐 Distinct Car Body Shapes**:
-     - `a_`: Sedan 🚗 (Curved aerodynamic roof)
-     - `b_`: SUV / Truck 🚙 (Boxy rugged frame with roof rails)
-     - `c_`: Sports Car 🏎️ (Sleek aerodynamic wedge racer)
+   - **📐 Simple Shapes per Car Type**:
+     - `a_`: Circle ●
+     - `b_`: Square ■
+     - `c_`: Triangle ▲
+     - `0`: Star / Wildcard ★
    - **Column Indicators**: `📦 Box` (wooden boxes), `❄️ Lock (N moves)` (locked columns), and `🎯 Only <carID>` (restricted colored roads).
    - **Board Grid**: Cells showing car IDs (`a1`–`c7`, rainbow `0`) with row coordinates (`Y=Max` to `Y=0`).
    - **Element Markers**: `👁️` (hidden car), `🔗 #id` (connected cars), and `🧬 innerCarID` (double layer with matching model shape).
