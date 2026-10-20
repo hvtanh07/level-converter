@@ -413,19 +413,45 @@
         }
 
         .board-cell {
-            width: 52px;
-            height: 42px;
+            width: 58px;
+            height: 48px;
             background: #1e293b;
-            border: 1.5px solid #475569;
+            border: 2px solid #475569;
             border-radius: 6px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             font-family: monospace;
-            font-weight: 700;
-            font-size: 0.85rem;
+            font-weight: 800;
+            font-size: 0.82rem;
             position: relative;
+            cursor: pointer;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+            padding: 2px;
+            box-sizing: border-box;
+        }
+
+        .board-cell:hover {
+            transform: translateY(-2px) scale(1.05);
+            z-index: 10;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.55);
+        }
+
+        .cell-shape-icon {
+            font-size: 11px;
+            line-height: 1;
+            filter: drop-shadow(0 1px 1px rgba(0,0,0,0.5));
+            pointer-events: none;
+        }
+
+        .cell-car-id {
+            font-size: 0.82rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+            pointer-events: none;
         }
 
         .board-cell.hidden-car::after {
@@ -441,6 +467,9 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            border: 1px solid #fff;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+            z-index: 5;
         }
 
         .board-cell.connected-car::before {
@@ -453,16 +482,24 @@
             color: #fff;
             padding: 1px 3px;
             border-radius: 4px;
+            border: 1px solid #fff;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+            font-weight: 800;
+            z-index: 5;
         }
 
         .inner-badge {
-            font-size: 0.65rem;
-            background: #4338ca;
-            color: #c7d2fe;
+            font-size: 0.62rem;
             padding: 1px 4px;
             border-radius: 3px;
-            margin-top: 1px;
-            font-weight: 600;
+            margin-top: 2px;
+            font-weight: 800;
+            display: inline-flex;
+            align-items: center;
+            gap: 2px;
+            border: 1px solid rgba(255, 255, 255, 0.75);
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+            line-height: 1;
         }
 
         .json-preview {
@@ -494,7 +531,127 @@
             color: var(--text-muted);
         }
 
-        /* Color classes for car IDs */
+        /* ============================================================
+           CAR SHAPES: a_, b_, c_
+           - a_: Sedan (aerodynamic curved dome roof)
+           - b_: SUV / Truck (boxy rugged frame with roof rack rails)
+           - c_: Sports Car (sleek wedge racer with aggressive diagonal profile)
+           ============================================================ */
+        .car-shape-a {
+            border-radius: 16px 16px 5px 5px !important;
+            box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.35), 0 2px 6px var(--car-glow, rgba(0,0,0,0.3));
+        }
+
+        .car-shape-b {
+            border-radius: 2px !important;
+            border-top-width: 3.5px !important;
+            box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.45), inset 0 -2px 0 rgba(0,0,0,0.25), 0 2px 6px var(--car-glow, rgba(0,0,0,0.3));
+        }
+
+        .car-shape-c {
+            border-radius: 18px 3px 18px 3px !important;
+            box-shadow: inset 2px 2px 0 rgba(255, 255, 255, 0.45), inset -2px -2px 0 rgba(0,0,0,0.3), 0 2px 6px var(--car-glow, rgba(0,0,0,0.3));
+        }
+
+        .car-shape-0 {
+            border-radius: 12px !important;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.4), 0 2px 6px var(--car-glow, rgba(0,0,0,0.3));
+        }
+
+        /* Badges shape variants */
+        .car-badge.car-shape-a {
+            border-radius: 8px 8px 3px 3px !important;
+        }
+        .car-badge.car-shape-b {
+            border-radius: 2px !important;
+            border-top-width: 2.5px !important;
+        }
+        .car-badge.car-shape-c {
+            border-radius: 9px 2px 9px 2px !important;
+        }
+        .car-badge.car-shape-0 {
+            border-radius: 6px !important;
+        }
+
+        /* ============================================================
+           CAR COLORS BY CODE:
+           _1: red
+           _2: blue
+           _3: green
+           _4: yellow
+           _5: pink
+           _6: orange
+           _7: white
+           0:  rainbow wildcard
+           ============================================================ */
+        .car-col-1 {
+            background: linear-gradient(180deg, #ef4444 0%, #b91c1c 100%) !important;
+            border-color: #fca5a5 !important;
+            color: #ffffff !important;
+            --car-glow: rgba(239, 68, 68, 0.5);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.75);
+        }
+
+        .car-col-2 {
+            background: linear-gradient(180deg, #3b82f6 0%, #1d4ed8 100%) !important;
+            border-color: #93c5fd !important;
+            color: #ffffff !important;
+            --car-glow: rgba(59, 130, 246, 0.5);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.75);
+        }
+
+        .car-col-3 {
+            background: linear-gradient(180deg, #22c55e 0%, #15803d 100%) !important;
+            border-color: #86efac !important;
+            color: #ffffff !important;
+            --car-glow: rgba(34, 197, 94, 0.5);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.75);
+        }
+
+        .car-col-4 {
+            background: linear-gradient(180deg, #facc15 0%, #ca8a04 100%) !important;
+            border-color: #fef08a !important;
+            color: #0f172a !important;
+            --car-glow: rgba(234, 179, 8, 0.6);
+            text-shadow: none;
+            font-weight: 800;
+        }
+
+        .car-col-5 {
+            background: linear-gradient(180deg, #ec4899 0%, #be185d 100%) !important;
+            border-color: #f9a8d4 !important;
+            color: #ffffff !important;
+            --car-glow: rgba(236, 72, 153, 0.5);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.75);
+        }
+
+        .car-col-6 {
+            background: linear-gradient(180deg, #f97316 0%, #c2410c 100%) !important;
+            border-color: #fdba74 !important;
+            color: #ffffff !important;
+            --car-glow: rgba(249, 115, 22, 0.5);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.75);
+        }
+
+        .car-col-7 {
+            background: linear-gradient(180deg, #ffffff 0%, #cbd5e1 100%) !important;
+            border-color: #64748b !important;
+            color: #0f172a !important;
+            --car-glow: rgba(255, 255, 255, 0.45);
+            text-shadow: none;
+            font-weight: 800;
+        }
+
+        .car-col-0 {
+            background: linear-gradient(135deg, #ef4444 0%, #f97316 20%, #eab308 40%, #22c55e 60%, #3b82f6 80%, #a855f7 100%) !important;
+            border-color: #ffffff !important;
+            color: #ffffff !important;
+            --car-glow: rgba(168, 85, 247, 0.6);
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
+            font-weight: 800;
+        }
+
+        /* Backward compatibility fallbacks */
         .car-a { border-color: #38bdf8; color: #bae6fd; background: rgba(56, 189, 248, 0.12); }
         .car-b { border-color: #4ade80; color: #bbf7d0; background: rgba(74, 222, 128, 0.12); }
         .car-c { border-color: #f472b6; color: #fbcfe8; background: rgba(244, 114, 182, 0.12); }
@@ -503,6 +660,74 @@
             border-color: #cbd5e1 !important; 
             color: #ffffff !important; 
             font-weight: 800;
+        }
+
+        /* Visual Legend Bar */
+        .visual-legend-bar {
+            background: rgba(15, 23, 42, 0.75);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 10px 16px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            width: 100%;
+            margin-bottom: 8px;
+            box-sizing: border-box;
+        }
+
+        .legend-group {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .legend-title {
+            font-weight: 700;
+            color: var(--text-secondary);
+            font-size: 0.76rem;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            margin-right: 2px;
+        }
+
+        .legend-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: rgba(30, 41, 59, 0.6);
+            padding: 2px 7px;
+            border-radius: 6px;
+            border: 1px solid rgba(51, 65, 85, 0.6);
+            font-size: 0.74rem;
+            color: var(--text-primary);
+        }
+
+        .legend-swatch {
+            width: 16px;
+            height: 16px;
+            border-radius: 4px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.65rem;
+            font-weight: 800;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            line-height: 1;
+        }
+
+        .legend-shape-pill {
+            padding: 2px 8px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: rgba(51, 65, 85, 0.85);
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
         }
 
         /* Nav Tabs */
@@ -876,13 +1101,34 @@
                     
                     <!-- Left: Visual Board -->
                     <div class="previewer-card" style="padding: 20px;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
                             <h3 style="font-size: 0.95rem; font-weight: 700; color: var(--text-secondary);">
                                 🎮 Visual Board Layout
                             </h3>
                             <span style="font-size: 0.75rem; color: var(--text-muted);">
                                 Top: Y = Max &nbsp;|&nbsp; Bottom: Y = 0
                             </span>
+                        </div>
+
+                        <!-- Color & Shape Legend -->
+                        <div class="visual-legend-bar">
+                            <div class="legend-group">
+                                <span class="legend-title">🎨 Colors:</span>
+                                <span class="legend-item"><span class="legend-swatch car-col-1">1</span> Red</span>
+                                <span class="legend-item"><span class="legend-swatch car-col-2">2</span> Blue</span>
+                                <span class="legend-item"><span class="legend-swatch car-col-3">3</span> Green</span>
+                                <span class="legend-item"><span class="legend-swatch car-col-4">4</span> Yellow</span>
+                                <span class="legend-item"><span class="legend-swatch car-col-5">5</span> Pink</span>
+                                <span class="legend-item"><span class="legend-swatch car-col-6">6</span> Orange</span>
+                                <span class="legend-item"><span class="legend-swatch car-col-7">7</span> White</span>
+                                <span class="legend-item"><span class="legend-swatch car-col-0">0</span> Rainbow</span>
+                            </div>
+                            <div class="legend-group">
+                                <span class="legend-title">📐 Shapes:</span>
+                                <span class="legend-item"><span class="legend-shape-pill car-shape-a">🚗 a_</span> Sedan (Curved)</span>
+                                <span class="legend-item"><span class="legend-shape-pill car-shape-b">🚙 b_</span> SUV (Boxy)</span>
+                                <span class="legend-item"><span class="legend-shape-pill car-shape-c">🏎️ c_</span> Sports (Wedge)</span>
+                            </div>
                         </div>
 
                         <div class="board-card" id="prev-board-card">
@@ -965,6 +1211,62 @@
     <script>
         // State
         let loadedLevels = []; // { sourceName, rawJson, newConfig, levelNum, colorMap }
+
+        // Car Visual Specifications: Colors (_1 to _7) & Shapes (a_, b_, c_)
+        const CAR_COLORS = {
+            '1': { name: 'Red', hex: '#ef4444', class: 'car-col-1', icon: '🔴', darkText: false },
+            '2': { name: 'Blue', hex: '#3b82f6', class: 'car-col-2', icon: '🔵', darkText: false },
+            '3': { name: 'Green', hex: '#22c55e', class: 'car-col-3', icon: '🟢', darkText: false },
+            '4': { name: 'Yellow', hex: '#eab308', class: 'car-col-4', icon: '🟡', darkText: true },
+            '5': { name: 'Pink', hex: '#ec4899', class: 'car-col-5', icon: '🌸', darkText: false },
+            '6': { name: 'Orange', hex: '#f97316', class: 'car-col-6', icon: '🟠', darkText: false },
+            '7': { name: 'White', hex: '#f8fafc', class: 'car-col-7', icon: '⚪', darkText: true },
+            '0': { name: 'Rainbow', hex: 'rainbow', class: 'car-col-0', icon: '🌈', darkText: false }
+        };
+
+        const CAR_SHAPES = {
+            'a': { name: 'Sedan', icon: '🚗', class: 'car-shape-a', desc: 'Curved Dome Roof' },
+            'b': { name: 'SUV', icon: '🚙', class: 'car-shape-b', desc: 'Boxy Rugged Frame' },
+            'c': { name: 'Sports', icon: '🏎️', class: 'car-shape-c', desc: 'Wedge Racer Curve' },
+            '0': { name: 'Wildcard', icon: '🌈', class: 'car-shape-0', desc: 'Rainbow Wildcard' }
+        };
+
+        function parseCarId(carId) {
+            if (!carId || carId === '0') {
+                return { type: '0', color: '0', fullId: '0' };
+            }
+            const str = String(carId).trim();
+            const match = str.match(/^([abcABC])_?([0-9]+)$/);
+            if (match) {
+                return {
+                    type: match[1].toLowerCase(),
+                    color: match[2],
+                    fullId: str
+                };
+            }
+            if (/^[0-9]+$/.test(str)) {
+                return { type: '0', color: str, fullId: str };
+            }
+            const t = str[0].toLowerCase();
+            const c = str.slice(1).replace('_', '');
+            return { type: (['a','b','c'].includes(t) ? t : 'a'), color: c || '1', fullId: str };
+        }
+
+        function getCarVisualInfo(carId) {
+            const { type, color, fullId } = parseCarId(carId);
+            const colorInfo = CAR_COLORS[color] || { name: 'Color ' + color, hex: '#94a3b8', class: 'car-col-0', icon: '❓', darkText: false };
+            const shapeInfo = CAR_SHAPES[type] || { name: 'Car', icon: '🚗', class: 'car-shape-a', desc: 'Standard' };
+            return {
+                type,
+                color,
+                fullId,
+                colorInfo,
+                shapeInfo,
+                colorClass: colorInfo.class,
+                shapeClass: shapeInfo.class,
+                displayName: type === '0' ? 'Rainbow Wildcard' : `${colorInfo.name} ${shapeInfo.name}`
+            };
+        }
 
         // Pseudo-random generator for reproducible or random seed
         function createRng(seed) {
@@ -1421,12 +1723,14 @@
                 const keys = Object.keys(level.colorMap).filter(k => k !== '0').slice(0, 5);
                 keys.forEach(k => {
                     const id = level.colorMap[k];
-                    const type = id[0];
-                    mapBadges.push(`<span class="car-badge car-${type}" title="Old Color ${k} -> ${id}">${id}</span>`);
+                    const vInfo = getCarVisualInfo(id);
+                    mapBadges.push(`<span class="car-badge ${vInfo.shapeClass} ${vInfo.colorClass}" title="Old Color ${k} -> ${id} (${vInfo.displayName})">${vInfo.shapeInfo.icon} ${id}</span>`);
                 });
                 if (Object.keys(level.colorMap).length - 1 > 5) {
                     mapBadges.push(`<span class="car-badge" style="color: var(--text-muted);">+${Object.keys(level.colorMap).length - 6}</span>`);
                 }
+
+                const dummyV = getCarVisualInfo(cfg.DummyType);
 
                 tr.innerHTML = `
                     <td style="font-weight: 500;">${level.sourceName}</td>
@@ -1435,7 +1739,7 @@
                     <td>${cfg.NumQueue} cols × ${cfg.NumPerRow} rows</td>
                     <td>${cfg.MaxMove}</td>
                     <td>
-                        <span class="car-badge car-${cfg.DummyType[0] || '0'}" style="font-size: 0.82rem; padding: 2px 7px;">${cfg.DummyType}</span>
+                        <span class="car-badge ${dummyV.shapeClass} ${dummyV.colorClass}" style="font-size: 0.82rem; padding: 2px 7px;">${dummyV.shapeInfo.icon} ${cfg.DummyType}</span>
                         ${cfg.DummyType === '0' ? '<span class="pill pill-purple" style="font-size: 0.7rem;">🌈 Bench</span>' : ''}
                     </td>
                     <td>${pills.join(' ')}</td>
@@ -1488,9 +1792,11 @@
 
             const dummyInfo = document.getElementById('modal-dummy-info');
             if (dummyInfo) {
+                const dummyV = getCarVisualInfo(cfg.DummyType);
                 dummyInfo.innerHTML = `
                     <span style="font-weight: 600;">Bench Car (DummyType):</span>
-                    <span class="car-badge car-${cfg.DummyType[0] || '0'}" style="font-size: 0.95rem; padding: 2px 8px;">${cfg.DummyType}</span>
+                    <span class="car-badge ${dummyV.shapeClass} ${dummyV.colorClass}" style="font-size: 0.95rem; padding: 2px 10px;">${dummyV.shapeInfo.icon} ${cfg.DummyType}</span>
+                    <span style="font-size: 0.85rem; color: var(--text-secondary); font-weight: 600;">(${dummyV.displayName})</span>
                     ${cfg.DummyType === '0' ? '<span class="pill pill-purple">🌈 Rainbow Car (0) starts on the Bench</span>' : '<span class="pill pill-blue">Starts on the Bench</span>'}
                 `;
             }
@@ -1517,10 +1823,18 @@
                 const ind = document.createElement('div');
                 ind.className = 'board-col-indicator';
                 let label = `C${c}`;
-                if (boxCols.has(c)) label = `📦 C${c}`;
-                else if (lockedCols.has(c)) label = `❄${lockedCols.get(c)} C${c}`;
-                else if (coloredCols.has(c)) label = `🎯${coloredCols.get(c)}`;
-                ind.textContent = label;
+                let sub = '';
+                if (boxCols.has(c)) {
+                    label = `📦 C${c}`;
+                } else if (lockedCols.has(c)) {
+                    label = `❄${lockedCols.get(c)} C${c}`;
+                } else if (coloredCols.has(c)) {
+                    const carId = coloredCols.get(c);
+                    const roadV = getCarVisualInfo(carId);
+                    label = `🎯 C${c}`;
+                    sub = `<span class="car-badge ${roadV.shapeClass} ${roadV.colorClass}" style="font-size: 0.68rem; padding: 1px 4px;">${roadV.shapeInfo.icon} ${carId}</span>`;
+                }
+                ind.innerHTML = `<span>${label}</span>${sub}`;
                 headerRow.appendChild(ind);
             }
             board.appendChild(headerRow);
@@ -1534,10 +1848,11 @@
                 const cols = rowStr.split(',');
                 cols.forEach((carId, x) => {
                     const key = `${x},${y}`;
+                    const vInfo = getCarVisualInfo(carId);
                     const cell = document.createElement('div');
-                    cell.className = `board-cell car-${carId[0] || '0'}`;
+                    cell.className = `board-cell ${vInfo.shapeClass} ${vInfo.colorClass}`;
 
-                    let tooltip = `(x: ${x}, y: ${y}) Car: ${carId}`;
+                    let tooltip = `(x: ${x}, y: ${y}) Car: ${carId} (${vInfo.displayName})\nType: Shape ${vInfo.type.toUpperCase()} (${vInfo.shapeInfo.name})\nColor: Code ${vInfo.color} (${vInfo.colorInfo.name})`;
 
                     if (hiddenSet.has(key)) {
                         cell.classList.add('hidden-car');
@@ -1550,15 +1865,19 @@
                         tooltip += ` [Connected #${cid}]`;
                     }
 
-                    cell.textContent = carId;
+                    cell.innerHTML = `
+                        <span class="cell-shape-icon">${vInfo.shapeInfo.icon}</span>
+                        <span class="cell-car-id">${carId}</span>
+                    `;
 
                     if (doubleMap.has(key)) {
                         const innerId = doubleMap.get(key);
+                        const innerV = getCarVisualInfo(innerId);
                         const innerBadge = document.createElement('span');
-                        innerBadge.className = 'inner-badge';
-                        innerBadge.textContent = innerId;
+                        innerBadge.className = `inner-badge ${innerV.shapeClass} ${innerV.colorClass}`;
+                        innerBadge.innerHTML = `<span style="font-size: 8px;">🧬</span>${innerId}`;
                         cell.appendChild(innerBadge);
-                        tooltip += ` [Inner: ${innerId}]`;
+                        tooltip += ` [Inner: ${innerId} (${innerV.displayName})]`;
                     }
 
                     cell.title = tooltip;
@@ -1857,8 +2176,10 @@
             // Dummy Bench Car
             const dummyElem = document.getElementById('prev-stat-dummy');
             const dummyType = cfg.DummyType || "0";
+            const dummyV = getCarVisualInfo(dummyType);
             dummyElem.innerHTML = `
-                <span class="car-badge car-${dummyType[0] || '0'}" style="font-size: 0.95rem; padding: 2px 8px;">${dummyType}</span>
+                <span class="car-badge ${dummyV.shapeClass} ${dummyV.colorClass}" style="font-size: 0.95rem; padding: 2px 9px;">${dummyV.shapeInfo.icon} ${dummyType}</span>
+                <span style="font-size: 0.8rem; color: var(--text-secondary); font-weight: 600;">(${dummyV.displayName})</span>
                 ${dummyType === '0' ? '<span class="pill pill-purple">🌈 Rainbow</span>' : '<span class="pill pill-blue">Bench Car</span>'}
             `;
 
@@ -1938,8 +2259,9 @@
                     subBadge = `<span class="pill pill-blue" style="font-size: 0.65rem; padding: 1px 3px;">${lockedCols.get(c)} moves</span>`;
                 } else if (coloredCols.has(c)) {
                     const carId = coloredCols.get(c);
+                    const roadV = getCarVisualInfo(carId);
                     label = `🎯 C${c}`;
-                    subBadge = `<span class="car-badge car-${carId[0] || '0'}" style="font-size: 0.7rem; padding: 1px 3px;">${carId}</span>`;
+                    subBadge = `<span class="car-badge ${roadV.shapeClass} ${roadV.colorClass}" style="font-size: 0.68rem; padding: 1px 4px;">${roadV.shapeInfo.icon} ${carId}</span>`;
                 }
 
                 ind.innerHTML = `<span>${label}</span>${subBadge}`;
@@ -1965,10 +2287,11 @@
                 const cols = rowStr.split(',');
                 cols.forEach((carId, x) => {
                     const key = `${x},${y}`;
+                    const vInfo = getCarVisualInfo(carId);
                     const cell = document.createElement('div');
-                    cell.className = `board-cell car-${carId[0] || '0'}`;
+                    cell.className = `board-cell ${vInfo.shapeClass} ${vInfo.colorClass}`;
 
-                    let tooltip = `Location: (X: ${x}, Y: ${y})\nOuter Car: ${carId}`;
+                    let tooltip = `Location: (X: ${x}, Y: ${y})\nOuter Car: ${carId} (${vInfo.displayName})\nType: Shape ${vInfo.type.toUpperCase()} (${vInfo.shapeInfo.name})\nColor: Code ${vInfo.color} (${vInfo.colorInfo.name})`;
 
                     if (hiddenSet.has(key)) {
                         cell.classList.add('hidden-car');
@@ -1981,15 +2304,19 @@
                         tooltip += `\nConnected Group: #${cid}`;
                     }
 
-                    cell.textContent = carId;
+                    cell.innerHTML = `
+                        <span class="cell-shape-icon">${vInfo.shapeInfo.icon}</span>
+                        <span class="cell-car-id">${carId}</span>
+                    `;
 
                     if (doubleMap.has(key)) {
                         const innerId = doubleMap.get(key);
+                        const innerV = getCarVisualInfo(innerId);
                         const innerBadge = document.createElement('span');
-                        innerBadge.className = 'inner-badge';
-                        innerBadge.textContent = innerId;
+                        innerBadge.className = `inner-badge ${innerV.shapeClass} ${innerV.colorClass}`;
+                        innerBadge.innerHTML = `<span style="font-size: 8px;">🧬</span>${innerId}`;
                         cell.appendChild(innerBadge);
-                        tooltip += `\nDouble Layer: Inner Car is ${innerId}`;
+                        tooltip += `\nDouble Layer: Inner Car is ${innerId} (${innerV.displayName})`;
                     }
 
                     cell.title = tooltip;
@@ -2003,10 +2330,12 @@
             // Bench display
             const benchElem = document.getElementById('prev-bench-display');
             const dummy = cfg.DummyType || '0';
+            const dummyV = getCarVisualInfo(dummy);
             benchElem.innerHTML = `
-                <div style="display: flex; align-items: center; gap: 10px;">
+                <div style="display: flex; align-items: center; gap: 12px;">
                     <span style="font-weight: 600; font-size: 0.9rem; color: var(--text-secondary);">🚗 Starting Bench Slot:</span>
-                    <span class="car-badge car-${dummy[0] || '0'}" style="font-size: 1.05rem; padding: 3px 10px;">${dummy}</span>
+                    <span class="car-badge ${dummyV.shapeClass} ${dummyV.colorClass}" style="font-size: 1.05rem; padding: 4px 12px;">${dummyV.shapeInfo.icon} ${dummy}</span>
+                    <span style="font-size: 0.85rem; font-weight: 600; color: var(--text-primary);">${dummyV.displayName}</span>
                 </div>
                 <div>
                     ${dummy === '0' 
@@ -2058,15 +2387,21 @@
                 const isMul3 = (total % 3 === 0);
                 const card = document.createElement('div');
                 card.className = 'inventory-card';
+                const vInfo = getCarVisualInfo(id);
 
                 card.innerHTML = `
                     <div class="inventory-header">
-                        <span class="car-badge car-${id[0] || '0'}" style="font-size: 0.88rem; padding: 2px 7px;">${id}</span>
+                        <span class="car-badge ${vInfo.shapeClass} ${vInfo.colorClass}" style="font-size: 0.88rem; padding: 2px 8px;">
+                            ${vInfo.shapeInfo.icon} ${id}
+                        </span>
                         ${id === '0' 
                             ? '<span class="pill pill-purple" style="font-size: 0.65rem;">Rainbow</span>' 
                             : (isMul3 
                                 ? `<span class="pill pill-green" style="font-size: 0.68rem;" title="${total / 3} complete set(s) of 3">✓ ${total / 3} set(s)</span>` 
                                 : `<span class="pill pill-rose" style="font-size: 0.68rem;" title="Remainder: ${total % 3}">⚠️ Rem: ${total % 3}</span>`)}
+                    </div>
+                    <div style="font-size: 0.76rem; color: var(--accent-blue); font-weight: 600; margin-top: 4px;">
+                        ${vInfo.displayName}
                     </div>
                     <div style="font-size: 1.15rem; font-weight: 700; color: var(--text-primary); margin-top: 2px;">
                         ${total} <span style="font-size: 0.72rem; color: var(--text-muted); font-weight: 500;">cars</span>
@@ -2094,7 +2429,10 @@
                 const card = document.createElement('div');
                 card.className = 'element-detail-card';
                 const items = cfg.DoubleLayerCars.map(d => {
-                    return `<span class="pill pill-green" style="font-size: 0.75rem;">(X:${d.x}, Y:${d.y}) ➔ Inner: <strong>${d.innerCarID}</strong></span>`;
+                    const innerV = getCarVisualInfo(d.innerCarID);
+                    return `<span class="pill pill-green" style="font-size: 0.75rem; display: inline-flex; align-items: center; gap: 4px;">
+                        (X:${d.x}, Y:${d.y}) ➔ Inner: <span class="car-badge ${innerV.shapeClass} ${innerV.colorClass}" style="padding: 1px 5px; font-size: 0.7rem;">${innerV.shapeInfo.icon} ${d.innerCarID}</span> (${innerV.displayName})
+                    </span>`;
                 }).join(' ');
                 card.innerHTML = `
                     <div style="display: flex; justify-content: space-between; align-items: center;">
@@ -2151,7 +2489,10 @@
                 const card = document.createElement('div');
                 card.className = 'element-detail-card';
                 const items = cfg.ColoredColumnsLocation.map(c => {
-                    return `<span class="pill pill-purple" style="font-size: 0.78rem;">Column C${c.index} ➔ Only: <strong class="car-badge car-${c.carID[0] || '0'}">${c.carID}</strong></span>`;
+                    const roadV = getCarVisualInfo(c.carID);
+                    return `<span class="pill pill-purple" style="font-size: 0.78rem; display: inline-flex; align-items: center; gap: 4px;">
+                        Column C${c.index} ➔ Only: <strong class="car-badge ${roadV.shapeClass} ${roadV.colorClass}" style="padding: 1px 5px; font-size: 0.72rem;">${roadV.shapeInfo.icon} ${c.carID}</strong> (${roadV.displayName})
+                    </span>`;
                 }).join(' ');
                 card.innerHTML = `
                     <div style="display: flex; justify-content: space-between; align-items: center;">

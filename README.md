@@ -40,9 +40,22 @@ Double-click `start_tool.bat` (or open [`index.html`](file:///c:/Users/TUAN%20AN
 ### Tab 2: 👁️ Level Previewer
 1. Paste new format level JSON into the text area (or click **📋 Paste from Clipboard**, **📂 Load JSON File**, or choose a preset from the **🎲 Sample** dropdown).
 2. The board immediately renders:
+   - **🎨 Color Visualization by Code**:
+     - `_1`: Red 🔴
+     - `_2`: Blue 🔵
+     - `_3`: Green 🟢
+     - `_4`: Yellow 🟡
+     - `_5`: Pink 🌸
+     - `_6`: Orange 🟠
+     - `_7`: White ⚪
+     - `0`: Rainbow Wildcard 🌈
+   - **📐 Distinct Car Body Shapes**:
+     - `a_`: Sedan 🚗 (Curved aerodynamic roof)
+     - `b_`: SUV / Truck 🚙 (Boxy rugged frame with roof rails)
+     - `c_`: Sports Car 🏎️ (Sleek aerodynamic wedge racer)
    - **Column Indicators**: `📦 Box` (wooden boxes), `❄️ Lock (N moves)` (locked columns), and `🎯 Only <carID>` (restricted colored roads).
    - **Board Grid**: Cells showing car IDs (`a1`–`c7`, rainbow `0`) with row coordinates (`Y=Max` to `Y=0`).
-   - **Element Markers**: `👁️` (hidden car), `🔗 #id` (connected cars), and `🧬 innerCarID` (double layer).
+   - **Element Markers**: `👁️` (hidden car), `🔗 #id` (connected cars), and `🧬 innerCarID` (double layer with matching model shape).
    - **Bench Spotlight**: Starting bench slot car (`DummyType`).
    - **Car Inventory & Modulo-3 Check**: Breakdown of every unique car, outer vs. inner counts, and whether the total forms complete sets of 3 (`✓ Sets of 3` vs. `⚠️ Remainder`).
    - **Obstacles Breakdown**: Detailed list of coordinates and parameters for all special level elements.
