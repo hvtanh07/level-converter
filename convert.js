@@ -200,17 +200,18 @@ function convertLevel(oldData, seed = null) {
         dummyType = colorMap[uniqueColors[0]] || "a1";
     }
 
-    // Map rows (Map[0] = top row, Map[last] = bottom row)
+    // Map rows:
+    // First row of config (Map[0]) is first column (c = 0) from left to right ingame
+    // First car on a row in config is the bottom car in game (r = 0 .. tilesPerColumn - 1)
     const mapRows = [];
-    for (let r = 0; r < tilesPerColumn; r++) {
-        const tileIdx = tilesPerColumn - 1 - r;
-        const rowCells = [];
-        for (let c = 0; c < numQueue; c++) {
-            const colTiles = columns[c] && columns[c].tiles ? columns[c].tiles : [];
-            const t = tileIdx < colTiles.length ? colTiles[tileIdx] : 0;
-            rowCells.push(colorMap[t] || "0");
+    for (let c = 0; c < numQueue; c++) {
+        const colTiles = columns[c] && columns[c].tiles ? columns[c].tiles : [];
+        const colCars = [];
+        for (let r = 0; r < tilesPerColumn; r++) {
+            const t = r < colTiles.length ? colTiles[r] : 0;
+            colCars.push(colorMap[t] || "0");
         }
-        mapRows.push(rowCells.join(","));
+        mapRows.push(colCars.join(","));
     }
 
     // Tile-based elements

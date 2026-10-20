@@ -160,17 +160,16 @@ def convert_level(old_data: Dict[str, Any], seed: int = None) -> Tuple[Dict[str,
         dummy_type = color_map.get(unique_colors[0], "a1") if unique_colors else "a1"
 
     # Map array:
-    # Map[0] = top row (tile index tiles_per_column - 1)
-    # Map[tiles_per_column - 1] = bottom row (tile index 0)
+    # First row of config (Map[0]) is first column (c = 0) from left to right ingame
+    # First car on a row in config is the bottom car in game (r = 0 .. tiles_per_column - 1)
     map_rows = []
-    for r in range(tiles_per_column):
-        tile_idx = tiles_per_column - 1 - r
-        row_cells = []
-        for c in range(num_queue):
-            col_tiles = columns[c].get('tiles', [])
-            t = col_tiles[tile_idx] if tile_idx < len(col_tiles) else 0
-            row_cells.append(color_map.get(t, "0"))
-        map_rows.append(",".join(row_cells))
+    for c in range(num_queue):
+        col_tiles = columns[c].get('tiles', [])
+        col_cars = []
+        for r in range(tiles_per_column):
+            t = col_tiles[r] if r < len(col_tiles) else 0
+            col_cars.append(color_map.get(t, "0"))
+        map_rows.append(",".join(col_cars))
 
     # Tile-based elements:
     # x = column index (0..num_queue-1)

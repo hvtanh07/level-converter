@@ -23,7 +23,7 @@ A batch conversion tool that converts level configurations from the old **StackS
   - `ConnectedCars`: Converted from `tileConnectionIds` grouped by connection ID `{ connectionID, cars: [{ x, y }] }`.
   - `DoubleLayerCars`: Converted from `tileInnerColors` with `{ x, y, innerCarID }`.
   - `DummyType`: Mapped from `benchStartColor`. Preserves `"0"` for rainbow/wildcard cars.
-  - `Map`: 2D comma-separated car grid with top-to-bottom orientation.
+  - `Map`: Column-major format where the first row of the config is the first column from left to right ingame (`Map[0]` = Column 0, `Map[x]` = Column $x$), and the first car on a row in the config is the bottom car in game (index 0 = bottom car $Y=0$, index $\text{NumPerRow}-1$ = top car).
 
 ---
 
@@ -104,7 +104,7 @@ node convert.js "path/to/levels" -o all_levels.zip --dir ./output_json/
 | **Car Variance** | Integers (1, 2, 4, 5, 6...) | Strings (`a1`–`c7`) | Randomized combination of types `a, b, c` and colors `1..7` |
 | **Wildcard** | `0` | `"0"` | Preserved as `"0"` |
 | **Bench Car** | `benchStartColor` | `DummyType` | Uses mapped car ID; sets `"0"` if `benchStartColor == 0` (preserving rainbow car) |
-| **Map Grid** | `columns[].tiles` | `Map` | Array of comma-separated strings (`Map[0]` = top row, `Map[last]` = bottom row) |
+| **Map Grid** | `columns[].tiles` | `Map` | Array of comma-separated strings where `Map[0]` = Column 0 (leftmost column ingame), `Map[x]` = Column $x$, and the first car in each row string is the bottom car ($Y=0$) up to the top car ($Y=\text{NumPerRow}-1$) |
 | **Hidden Cars** | `columns[].tilesHidden` | `HiddenColorCar` | Array of `{ "x": col, "y": row }` |
 | **Locked Columns**| `columnFrozenCounts` | `LockedColumns` | Array of `{ "index": col, "counter": count }` for counts `> 0` |
 | **Colored Roads** | `columnRestrictedColors` | `ColoredColumnsLocation` | Array of `{ "index": col, "carID": mapped_car_id }` for entries `!= -1` |

@@ -1485,18 +1485,17 @@
             }
 
             // Map rows:
-            // Map[0] = top row (tile index tilesPerColumn - 1)
-            // Map[tilesPerColumn - 1] = bottom row (tile index 0)
+            // First row of config (Map[0]) is first column (c = 0) from left to right ingame
+            // First car on a row in config is the bottom car in game (r = 0 .. tilesPerColumn - 1)
             const mapRows = [];
-            for (let r = 0; r < tilesPerColumn; r++) {
-                const tileIdx = tilesPerColumn - 1 - r;
-                const rowCells = [];
-                for (let c = 0; c < numQueue; c++) {
-                    const colTiles = columns[c] && columns[c].tiles ? columns[c].tiles : [];
-                    const t = tileIdx < colTiles.length ? colTiles[tileIdx] : 0;
-                    rowCells.push(colorMap[t] || "0");
+            for (let c = 0; c < numQueue; c++) {
+                const colTiles = columns[c] && columns[c].tiles ? columns[c].tiles : [];
+                const colCars = [];
+                for (let r = 0; r < tilesPerColumn; r++) {
+                    const t = r < colTiles.length ? colTiles[r] : 0;
+                    colCars.push(colorMap[t] || "0");
                 }
-                mapRows.push(rowCells.join(","));
+                mapRows.push(colCars.join(","));
             }
 
             // Tile-based elements
@@ -1841,10 +1840,13 @@
             const coloredCols = new Map((cfg.ColoredColumnsLocation || []).map(c => [c.index, c.carID]));
             const boxCols = new Set((cfg.WoodenBoxColumns || []).map(b => b.index));
 
+            const numCols = cfg.NumQueue || cfg.Map.length;
+            const numRows = cfg.NumPerRow || (cfg.Map[0] ? cfg.Map[0].split(',').length : 0);
+
             // Column indicators header row
             const headerRow = document.createElement('div');
             headerRow.className = 'board-header-row';
-            for (let c = 0; c < cfg.NumQueue; c++) {
+            for (let c = 0; c < numCols; c++) {
                 const ind = document.createElement('div');
                 ind.className = 'board-col-indicator';
                 let label = `C${c}`;
@@ -1864,14 +1866,22 @@
             }
             board.appendChild(headerRow);
 
-            // cfg.Map[0] is top row (y = NumPerRow - 1) down to Map[last] (y = 0)
-            cfg.Map.forEach((rowStr, rIdx) => {
-                const y = cfg.NumPerRow - 1 - rIdx;
+            // Map parsing:
+            // - The first row of the config is the first column from left to right ingame (Map[0] = Column 0)
+            // - The first car on a row in the config is the bottom car in game (index 0 = y = 0)
+            const colCars = [];
+            for (let x = 0; x < numCols; x++) {
+                const colStr = (cfg.Map && cfg.Map[x]) ? cfg.Map[x] : '';
+                colCars.push(colStr ? colStr.split(',').map(s => s.trim()) : []);
+            }
+
+            // Render from top (y = numRows - 1) down to bottom (y = 0)
+            for (let y = numRows - 1; y >= 0; y--) {
                 const rowDiv = document.createElement('div');
                 rowDiv.className = 'board-row';
 
-                const cols = rowStr.split(',');
-                cols.forEach((carId, x) => {
+                for (let x = 0; x < numCols; x++) {
+                    const carId = (colCars[x] && colCars[x][y] !== undefined) ? colCars[x][y] : '0';
                     const key = `${x},${y}`;
                     const vInfo = getCarVisualInfo(carId);
                     const cell = document.createElement('div');
@@ -1907,9 +1917,9 @@
 
                     cell.title = tooltip;
                     rowDiv.appendChild(cell);
-                });
+                }
                 board.appendChild(rowDiv);
-            });
+            }
 
             // JSON preview
             const jsonStr = JSON.stringify(cfg, null, 4);
@@ -2061,23 +2071,23 @@
         const SAMPLE_LEVELS = {
             "55": {
                 name: "Level 55 (Double Layer, Triangle ▲, 4x4)",
-                data: {"FormatVersion": 2, "MapLevel": 55, "NumQueue": 4, "NumPerRow": 4, "ExtraColumnsCount": 0, "MaxMove": 60, "Map": ["c2,c4,c3,c6", "c4,c2,c6,c3", "c6,c4,c2,c1", "c6,c3,c1,c1"], "DummyType": "0", "HiddenColorCar": [], "LockedColumns": [], "ColoredColumnsLocation": [], "WoodenBoxColumns": [], "ConnectedCars": [], "DoubleLayerCars": [{"x": 0, "y": 0, "innerCarID": "c1"}, {"x": 0, "y": 1, "innerCarID": "c4"}, {"x": 2, "y": 2, "innerCarID": "c3"}, {"x": 3, "y": 3, "innerCarID": "c2"}]}
+                data: {"FormatVersion": 2, "MapLevel": 55, "NumQueue": 4, "NumPerRow": 4, "ExtraColumnsCount": 0, "MaxMove": 60, "Map": ["c1,c1,c4,c6", "c2,c4,c6,c4", "c3,c6,c1,c2", "c3,c3,c2,c1"], "DummyType": "0", "HiddenColorCar": [], "LockedColumns": [], "ColoredColumnsLocation": [], "WoodenBoxColumns": [], "ConnectedCars": [], "DoubleLayerCars": [{"x": 0, "y": 0, "innerCarID": "c3"}, {"x": 0, "y": 1, "innerCarID": "c4"}, {"x": 2, "y": 2, "innerCarID": "c2"}, {"x": 3, "y": 3, "innerCarID": "c6"}]}
             },
             "25": {
                 name: "Level 25 (Connected, Circle ● & Triangle ▲, 3x4)",
-                data: {"FormatVersion": 2, "MapLevel": 25, "NumQueue": 3, "NumPerRow": 4, "ExtraColumnsCount": 0, "MaxMove": 35, "Map": ["a4,c5,a3", "a4,a4,a3", "c5,a3,a4", "a3,c5,c5"], "DummyType": "0", "HiddenColorCar": [], "LockedColumns": [], "ColoredColumnsLocation": [], "WoodenBoxColumns": [], "ConnectedCars": [{"connectionID": 1, "cars": [{"x": 1, "y": 1}, {"x": 2, "y": 1}]}], "DoubleLayerCars": []}
+                data: {"FormatVersion": 2, "MapLevel": 25, "NumQueue": 3, "NumPerRow": 4, "ExtraColumnsCount": 0, "MaxMove": 35, "Map": ["a3,c5,a4,a4", "c5,a3,a4,c5", "c5,a4,a3,a3"], "DummyType": "0", "HiddenColorCar": [], "LockedColumns": [], "ColoredColumnsLocation": [], "WoodenBoxColumns": [], "ConnectedCars": [{"connectionID": 1, "cars": [{"x": 1, "y": 1}, {"x": 2, "y": 1}]}], "DoubleLayerCars": []}
             },
             "45": {
                 name: "Level 45 (Wooden Box, Circle ●, Square ■, Triangle ▲, 4x6)",
-                data: {"FormatVersion": 2, "MapLevel": 45, "NumQueue": 4, "NumPerRow": 6, "ExtraColumnsCount": 0, "MaxMove": 30, "Map": ["c5,a4,a3,b3", "c5,a4,a3,b3", "c5,b3,a3,b3", "a3,b3,c5,a4", "c5,a4,c5,b3", "a3,a4,a3,a4"], "DummyType": "0", "HiddenColorCar": [], "LockedColumns": [], "ColoredColumnsLocation": [], "WoodenBoxColumns": [{"index": 2}], "ConnectedCars": [], "DoubleLayerCars": []}
+                data: {"FormatVersion": 2, "MapLevel": 45, "NumQueue": 4, "NumPerRow": 6, "ExtraColumnsCount": 0, "MaxMove": 30, "Map": ["c7,b3,c7,b3,b3,b3", "a5,a5,c4,c4,a5,a5", "c7,b3,b3,c7,c7,c7", "a5,c4,a5,c4,c4,c4"], "DummyType": "0", "HiddenColorCar": [], "LockedColumns": [], "ColoredColumnsLocation": [], "WoodenBoxColumns": [{"index": 2}], "ConnectedCars": [], "DoubleLayerCars": []}
             },
             "34": {
                 name: "Level 34 (Locked + Hidden, All Shapes ● ■ ▲, 7x6)",
-                data: {"FormatVersion": 2, "MapLevel": 34, "NumQueue": 7, "NumPerRow": 6, "ExtraColumnsCount": 0, "MaxMove": 55, "Map": ["a4,a4,b5,a4,b5,b3,b3", "c5,a5,a4,c5,c4,c4,c4", "a3,b3,a5,a3,a3,a5,a5", "c5,b5,c4,c5,a5,b5,b5", "a3,b3,c4,b3,b3,b5,c4", "a3,c5,a4,a5,c5,a4,a3"], "DummyType": "0", "HiddenColorCar": [{"x": 4, "y": 3}, {"x": 4, "y": 4}], "LockedColumns": [{"index": 0, "counter": 2}], "ColoredColumnsLocation": [], "WoodenBoxColumns": [], "ConnectedCars": [{"connectionID": 1, "cars": [{"x": 5, "y": 4}, {"x": 6, "y": 4}]}, {"connectionID": 2, "cars": [{"x": 5, "y": 2}, {"x": 6, "y": 2}]}], "DoubleLayerCars": []}
+                data: {"FormatVersion": 2, "MapLevel": 34, "NumQueue": 7, "NumPerRow": 6, "ExtraColumnsCount": 0, "MaxMove": 55, "Map": ["c5,c5,a4,c5,a4,b1", "a4,b2,a6,b2,c6,b1", "b1,c4,c4,c6,b1,a6", "c6,b2,a4,c5,a4,b1", "a4,b2,c6,c5,c4,a6", "b1,a6,a6,c6,c4,b2", "c5,c4,a6,c6,c4,b2"], "DummyType": "0", "HiddenColorCar": [{"x": 4, "y": 3}, {"x": 4, "y": 4}], "LockedColumns": [{"index": 0, "counter": 2}], "ColoredColumnsLocation": [], "WoodenBoxColumns": [], "ConnectedCars": [{"connectionID": 1, "cars": [{"x": 5, "y": 4}, {"x": 6, "y": 4}]}, {"connectionID": 2, "cars": [{"x": 5, "y": 2}, {"x": 6, "y": 2}]}], "DoubleLayerCars": []}
             },
             "35": {
                 name: "Level 35 (Colored Roads + Dummy, All Shapes ● ■ ▲, 4x6)",
-                data: {"FormatVersion": 2, "MapLevel": 35, "NumQueue": 4, "NumPerRow": 6, "ExtraColumnsCount": 0, "MaxMove": 40, "Map": ["b3,a3,c5,0", "b3,b3,a4,a4", "a4,c5,c5,a4", "a4,c5,b3,b3", "c5,b3,a3,a3", "a3,a4,a3,a3"], "DummyType": "c5", "HiddenColorCar": [], "LockedColumns": [], "ColoredColumnsLocation": [{"index": 0, "carID": "c5"}, {"index": 3, "carID": "a3"}], "WoodenBoxColumns": [], "ConnectedCars": [], "DoubleLayerCars": []}
+                data: {"FormatVersion": 2, "MapLevel": 35, "NumQueue": 4, "NumPerRow": 6, "ExtraColumnsCount": 0, "MaxMove": 40, "Map": ["b4,b2,a3,a3,b3,b3", "a3,b3,b2,b2,b3,b4", "b4,b4,b3,b2,a3,b2", "b4,b4,b3,a3,a3,0"], "DummyType": "b2", "HiddenColorCar": [], "LockedColumns": [], "ColoredColumnsLocation": [{"index": 0, "carID": "b2"}, {"index": 3, "carID": "b4"}], "WoodenBoxColumns": [], "ConnectedCars": [], "DoubleLayerCars": []}
             }
         };
 
@@ -2185,13 +2195,13 @@
             const status = document.getElementById('previewer-status');
             const renderContainer = document.getElementById('previewer-render-container');
 
+            const numCols = cfg.NumQueue || cfg.Map.length;
+            const numRows = cfg.NumPerRow || (cfg.Map[0] ? cfg.Map[0].split(',').length : 0);
+
             status.className = 'preview-status preview-status-ok';
-            status.innerHTML = `<span>✅</span> <strong>Valid Level JSON:</strong> Level ${cfg.MapLevel ?? '?'} (${cfg.NumQueue || cfg.Map[0]?.split(',').length} cols × ${cfg.NumPerRow || cfg.Map.length} rows)${notice ? ` — <em>${notice}</em>` : ''}`;
+            status.innerHTML = `<span>✅</span> <strong>Valid Level JSON:</strong> Level ${cfg.MapLevel ?? '?'} (${numCols} cols × ${numRows} rows)${notice ? ` — <em>${notice}</em>` : ''}`;
 
             renderContainer.style.display = 'flex';
-
-            const numCols = cfg.NumQueue || (cfg.Map[0] ? cfg.Map[0].split(',').length : 0);
-            const numRows = cfg.NumPerRow || cfg.Map.length;
 
             // Stats Bar
             document.getElementById('prev-stat-level').textContent = cfg.MapLevel ?? '-';
@@ -2259,12 +2269,22 @@
             const coloredCols = new Map((cfg.ColoredColumnsLocation || []).map(c => [c.index, c.carID]));
             const boxCols = new Set((cfg.WoodenBoxColumns || []).map(b => b.index));
 
+            // Map parsing:
+            // - The first row of the config is the first column from left to right ingame (cfg.Map[0] = Column 0)
+            // - The first car on a row in the config is the bottom car in game (index 0 = y = 0)
+            const colCars = [];
+            for (let x = 0; x < numCols; x++) {
+                const colStr = (cfg.Map && cfg.Map[x]) ? cfg.Map[x] : '';
+                colCars.push(colStr ? colStr.split(',').map(s => s.trim()) : []);
+            }
+
             // Header indicators row
             const headerRow = document.createElement('div');
             headerRow.className = 'board-row-labeled';
             
             const blankLabel = document.createElement('div');
             blankLabel.className = 'board-row-label';
+            blankLabel.textContent = '';
             headerRow.appendChild(blankLabel);
 
             const indRow = document.createElement('div');
@@ -2295,9 +2315,8 @@
             headerRow.appendChild(indRow);
             board.appendChild(headerRow);
 
-            // Rows (top to bottom)
-            cfg.Map.forEach((rowStr, rIdx) => {
-                const y = numRows - 1 - rIdx;
+            // Rows (top to bottom on screen: y = numRows - 1 down to 0)
+            for (let y = numRows - 1; y >= 0; y--) {
                 const rowWrap = document.createElement('div');
                 rowWrap.className = 'board-row-labeled';
 
@@ -2309,8 +2328,8 @@
                 const rowDiv = document.createElement('div');
                 rowDiv.className = 'board-row';
 
-                const cols = rowStr.split(',');
-                cols.forEach((carId, x) => {
+                for (let x = 0; x < numCols; x++) {
+                    const carId = (colCars[x] && colCars[x][y] !== undefined) ? colCars[x][y] : '0';
                     const key = `${x},${y}`;
                     const vInfo = getCarVisualInfo(carId);
                     const cell = document.createElement('div');
@@ -2346,11 +2365,11 @@
 
                     cell.title = tooltip;
                     rowDiv.appendChild(cell);
-                });
+                }
 
                 rowWrap.appendChild(rowDiv);
                 board.appendChild(rowWrap);
-            });
+            }
 
             // Bench display
             const benchElem = document.getElementById('prev-bench-display');
